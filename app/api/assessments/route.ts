@@ -1,0 +1,127 @@
+import { desc, eq } from "drizzle-orm";
+import { getDb } from "../../../db";
+import { assessments, questions } from "../../../db/schema";
+import { apiError, requireRequestUser } from "../../../lib/platform";
+
+type QuestionInput = {
+  prompt?: string;
+  options?: string[];
+  correctOption?: number;
+  points?: number;
+};
+
+export async function GET(request: Request) {
+  const user = requireRequestUser(request);
+  if (user instanceof Response) return user;
+
+  try {
+    const db = getDb();
+    const rows = await db
+      .select({
+        id: assessments.id,
+        title: assessments.title,
+        description: assessments.description,
+        assessmentType: assessments.assessmentType,
+        subject: assessments.subject,
+        className: assessments.className,
+        durationMinutes: assessments.durationMinutes,
+        passMark: assessments.passMark,
+        createdAt: assessments.createdAt,
+      })
+      .from(assessments)
+      .where(eq(assessments.published, true))
+      .orderBy(desc(assessments.createdAt), desc(assessments.id));
+
+    const allQuestions = await db.select({ assessmentId: questions.assessmentId }).from(questions);
+    const counts = allQuestions.reduce<Record<number, number>>((map, question) => {
+      map[question.assessmentId] = (map[question.assessmentId] ?? 0) + 1;
+      return map;
+    }, {});
+
+    return Response.json({ assessments: rows.map((row) => ({ ...row, questionCount: counts[row.id] ?? 0 })) });
+  } catch (error) {
+    return apiError(error);
+  }
+}
+
+export async function POST(request: Request) {
+  const user = requireRequestUser(request);
+  if (user instanceof Response) return user;
+
+  try {
+    const payload = (await request.json()) as {
+      title?: string;
+      description?: string;
+      assessmentType?: "quiz" | "exam";
+      subject?: string;
+      className?: string;
+      durationMinutes?: number;
+      passMark?: number;
+      questions?: QuestionInput[];
+    };
+
+    const title = payload.title?.trim() ?? "";
+    const subject = payload.subject?.trim() ?? "";
+    const className = payload.className?.trim() ?? "";
+    const assessmentType = payload.assessmentType === "exam" ? "exam" : "quiz";
+    const durationMinutes = Math.min(180, Math.max(1, Math.round(Number(payload.durationMinutes) || 15)));
+    const passMark = Math.min(100, Math.max(0, Math.round(Number(payload.passMark) || 50)));
+    const questionInputs = Array.isArray(payload.questions) ? payload.questions : [];
+
+    if (!title || !subject || !className) {
+      return Response.json({ error: "Title, subject and class are required." }, { status: 400 });
+    }
+    if (questionInputs.length < 1 || questionInputs.length > 50) {
+      return Response.json({ error: "Add between 1 and 50 questions." }, { status: 400 });
+    }
+
+    const normalizedQuestions = questionInputs.map((question, index) => {
+      const prompt = question.prompt?.trim() ?? "";
+      const options = Array.isArray(question.options) ? question.options.map((option) => option.trim()) : [];
+      const correctOption = Number(question.correctOption);
+      const points = Math.min(20, Math.max(1, Math.round(Number(question.points) || 1)));
+
+      if (!prompt || options.length < 2 || options.length > 6 || options.some((option) => !option)) {
+        throw new Error(`Question ${index + 1} needs a prompt and 2–6 complete answer options.`);
+      }
+      if (!Number.isInteger(correctOption) || correctOption < 0 || correctOption >= options.length) {
+        throw new Error(`Choose the correct answer for question ${index + 1}.`);
+      }
+
+      return { prompt, options, correctOption, points };
+    });
+
+    const db = getDb();
+    const [assessment] = await db
+      .insert(assessments)
+      .values({
+        title,
+        description: payload.description?.trim() ?? "",
+        assessmentType,
+        subject,
+        className,
+        durationMinutes,
+        passMark,
+        createdBy: user,
+      })
+      .returning();
+
+    await db.insert(questions).values(
+      normalizedQuestions.map((question, position) => ({
+        assessmentId: assessment.id,
+        prompt: question.prompt,
+        optionsJson: JSON.stringify(question.options),
+        correctOption: question.correctOption,
+        points: question.points,
+        position,
+      })),
+    );
+
+    return Response.json({ assessment: { ...assessment, questionCount: normalizedQuestions.length } }, { status: 201 });
+  } catch (error) {
+    if (error instanceof Error && (error.message.startsWith("Question") || error.message.startsWith("Choose"))) {
+      return Response.json({ error: error.message }, { status: 400 });
+    }
+    return apiError(error);
+  }
+}

@@ -28,6 +28,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { LearningStudio } from "./components/LearningStudio";
 
 const portal = "https://purplestarsportalsec.pythonanywhere.com";
 
@@ -53,6 +54,8 @@ const navigation: { label: string; items: PortalItem[] }[] = [
     items: [
       { label: "Score entry", description: "Enter CA and term scores", href: `${portal}/results/score-entry/`, icon: FilePenLine },
       { label: "Results", description: "Review termly and session results", href: `${portal}/results/report-cards/`, icon: ChartNoAxesCombined },
+      { label: "Lesson notes", description: "Upload downloadable PDF notes", href: "#lesson-notes", icon: BookOpen },
+      { label: "Quizzes & exams", description: "Create instantly graded assessments", href: "#assessments", icon: GraduationCap },
       { label: "E-learning", description: "Notes, assignments and resources", href: `${portal}/curriculum/`, icon: BookOpen },
     ],
   },
@@ -198,6 +201,7 @@ export default function Home() {
                 {group.items.map((item) => {
                   const Icon = item.icon;
                   const isOverview = item.href === "#dashboard-main";
+                  const isInternal = item.href.startsWith("#");
                   return (
                     <a
                       className={`nav-item${isOverview ? " active" : ""}`}
@@ -205,13 +209,13 @@ export default function Home() {
                       key={item.label}
                       title={sidebarCompact ? item.label : undefined}
                       aria-current={isOverview ? "page" : undefined}
-                      target={isOverview ? undefined : "_blank"}
-                      rel={isOverview ? undefined : "noreferrer"}
+                      target={isInternal ? undefined : "_blank"}
+                      rel={isInternal ? undefined : "noreferrer"}
                       onClick={closeMobileNavigation}
                     >
                       <span className="nav-icon"><Icon size={18} strokeWidth={1.9} /></span>
                       <span className="nav-text">{item.label}</span>
-                      {!isOverview && <ExternalLink className="nav-external" size={13} aria-hidden="true" />}
+                      {!isInternal && <ExternalLink className="nav-external" size={13} aria-hidden="true" />}
                     </a>
                   );
                 })}
@@ -314,6 +318,8 @@ export default function Home() {
             );
           })}
         </section>
+
+        <LearningStudio />
 
         <div className="dashboard-grid">
           <div className="primary-column">
