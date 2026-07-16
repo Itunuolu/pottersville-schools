@@ -38,3 +38,21 @@ test("student portal supports PDF actions and immediate scoring", async () => {
   assert.match(fileRoute, /content-disposition/);
   await access(new URL("drizzle/0000_optimal_cassandra_nova.sql", root));
 });
+
+test("assessment builder supports validated CSV and Excel question imports", async () => {
+  const [importer, studio, template, packageJson] = await Promise.all([
+    readFile(new URL("app/components/ExamQuestionImporter.tsx", root), "utf8"),
+    readFile(new URL("app/components/LearningStudio.tsx", root), "utf8"),
+    readFile(new URL("public/exam-question-template.csv", root), "utf8"),
+    readFile(new URL("package.json", root), "utf8"),
+  ]);
+
+  assert.match(importer, /\.csv/);
+  assert.match(importer, /\.xlsx/);
+  assert.match(importer, /Missing required column/);
+  assert.match(importer, /correct answer must be A–D or match an option exactly/);
+  assert.match(importer, /Only the first 50 questions/);
+  assert.match(studio, /<ExamQuestionImporter/);
+  assert.match(template, /^Question,Option A,Option B,Option C,Option D,Correct Answer,Marks/m);
+  assert.match(packageJson, /"read-excel-file"/);
+});

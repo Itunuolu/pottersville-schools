@@ -16,6 +16,7 @@ import {
   X,
 } from "lucide-react";
 import { FormEvent, useCallback, useEffect, useState } from "react";
+import { ExamQuestionImporter } from "./ExamQuestionImporter";
 
 type LessonNote = {
   id: number;
@@ -39,7 +40,7 @@ type Assessment = {
   questionCount: number;
 };
 
-type QuestionDraft = {
+export type QuestionDraft = {
   prompt: string;
   options: string[];
   correctOption: number;
@@ -235,11 +236,17 @@ export function LearningStudio() {
                 <label><span>Instructions <em>optional</em></span><textarea name="description" rows={2} maxLength={400} placeholder="Read each question carefully and choose the best answer." /></label>
               </div>
 
+              <ExamQuestionImporter onImport={(importedQuestions) => {
+                setQuestions(importedQuestions);
+                showMessage("success", `${importedQuestions.length} questions and answers imported. Review them, then publish the assessment.`);
+              }} />
+
               <div className="question-builder-head"><div><strong>Questions</strong><span>{questions.length} total</span></div><button type="button" onClick={() => setQuestions((current) => [...current, newQuestion()])}><Plus size={14} />Add question</button></div>
               <div className="question-builder">
                 {questions.map((question, questionIndex) => (
                   <fieldset className="question-card" key={questionIndex}>
                     <div className="question-number"><span>{questionIndex + 1}</span><strong>Multiple choice</strong>{questions.length > 1 && <button type="button" aria-label={`Remove question ${questionIndex + 1}`} onClick={() => setQuestions((current) => current.filter((_, index) => index !== questionIndex))}><Trash2 size={15} /></button>}</div>
+                    <label className="question-points"><span>Marks</span><input type="number" min="1" max="20" value={question.points} onChange={(event) => updateQuestion(questionIndex, { points: Number(event.target.value) })} aria-label={`Marks for question ${questionIndex + 1}`} /></label>
                     <label><span>Question</span><textarea required rows={2} value={question.prompt} onChange={(event) => updateQuestion(questionIndex, { prompt: event.target.value })} placeholder="Write your question here" /></label>
                     <div className="answer-options">
                       <span className="answer-options-label">Answers <em>Select the correct one</em></span>
