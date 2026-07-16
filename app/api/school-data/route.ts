@@ -103,23 +103,56 @@ export async function POST(request: Request) {
 
 async function seedDemo(adminEmail: string) {
   const db = getDb();
-  const existingClasses = await db.select().from(schoolClasses).limit(1);
-  if (existingClasses.length) return { seeded: false, message: "Demo structure already exists." };
+  const created = { sessions: 0, terms: 0, classes: 0, subjects: 0, users: 0, timetable: 0, announcements: 0, events: 0 };
 
-  const [session] = await db.insert(academicSessions).values({ name: "2026/2027", startDate: "2026-09-07", endDate: "2027-07-23", isCurrent: true }).returning();
-  const [term] = await db.insert(academicTerms).values({ sessionId: session.id, name: "First Term", startDate: "2026-09-07", endDate: "2026-12-18", isCurrent: true }).returning();
-  const classRows = await db.insert(schoolClasses).values([
+  const sessions = await db.select().from(academicSessions);
+  let session = sessions.find((item) => item.name === "2026/2027");
+  if (!session) {
+    [session] = await db.insert(academicSessions).values({ name: "2026/2027", startDate: "2026-09-07", endDate: "2027-07-23", isCurrent: sessions.length === 0 }).returning();
+    created.sessions += 1;
+  }
+
+  const terms = await db.select().from(academicTerms);
+  let term = terms.find((item) => item.sessionId === session.id && item.name === "First Term");
+  if (!term) {
+    [term] = await db.insert(academicTerms).values({ sessionId: session.id, name: "First Term", startDate: "2026-09-07", endDate: "2026-12-18", isCurrent: terms.length === 0 }).returning();
+    created.terms += 1;
+  }
+
+  const classDefinitions = [
     { name: "JSS 2A", level: "JSS 2", arm: "A", capacity: 32 },
     { name: "JSS 3A", level: "JSS 3", arm: "A", capacity: 30 },
     { name: "SS 1B", level: "SS 1", arm: "B", capacity: 28 },
-  ]).returning();
-  const subjectRows = await db.insert(subjects).values([
+  ];
+  const existingClasses = await db.select().from(schoolClasses);
+  const classRows: typeof existingClasses = [];
+  for (const definition of classDefinitions) {
+    let row = existingClasses.find((item) => item.name === definition.name);
+    if (!row) {
+      [row] = await db.insert(schoolClasses).values(definition).returning();
+      created.classes += 1;
+    }
+    classRows.push(row);
+  }
+
+  const subjectDefinitions = [
     { name: "Basic Science", code: "BSC", department: "Science" },
     { name: "Biology", code: "BIO", department: "Science" },
     { name: "Agricultural Science", code: "AGR", department: "Science" },
     { name: "Mathematics", code: "MAT", department: "Science" },
     { name: "English Language", code: "ENG", department: "Languages" },
-  ]).returning();
+  ];
+  const existingSubjects = await db.select().from(subjects);
+  const subjectRows: typeof existingSubjects = [];
+  for (const definition of subjectDefinitions) {
+    let row = existingSubjects.find((item) => item.code === definition.code);
+    if (!row) {
+      [row] = await db.insert(subjects).values(definition).returning();
+      created.subjects += 1;
+    }
+    subjectRows.push(row);
+  }
+
   const teacherEmail = "faith.teacher@purplestars.demo";
   const demoStudents = Array.from({ length: 12 }, (_, index) => ({
     email: `student${index + 1}@purplestars.demo`,
@@ -128,18 +161,41 @@ async function seedDemo(adminEmail: string) {
     className: "SS 1B",
     createdBy: adminEmail,
   }));
-  await db.insert(portalUsers).values([{ email: teacherEmail, displayName: "Akinkugbe Faith", role: "teacher", createdBy: adminEmail }, ...demoStudents]).onConflictDoNothing();
+  const existingPeople = await db.select().from(portalUsers);
+  const missingPeople = [{ email: teacherEmail, displayName: "Akinkugbe Faith", role: "teacher" as const, createdBy: adminEmail }, ...demoStudents].filter((person) => !existingPeople.some((item) => item.email === person.email));
+  if (missingPeople.length) {
+    await db.insert(portalUsers).values(missingPeople).onConflictDoNothing();
+    created.users += missingPeople.length;
+  }
   await db.insert(teacherAssignments).values([
     { teacherEmail, subjectId: subjectRows[0].id, classId: classRows[0].id },
     { teacherEmail, subjectId: subjectRows[1].id, classId: classRows[2].id },
     { teacherEmail, subjectId: subjectRows[2].id, classId: classRows[1].id },
   ]).onConflictDoNothing();
-  await db.insert(timetableEntries).values([
+
+  const timetableDefinitions = [
     { classId: classRows[0].id, subjectId: subjectRows[0].id, teacherEmail, dayOfWeek: 4, startTime: "08:15", endTime: "09:00", room: "Science Lab" },
     { classId: classRows[2].id, subjectId: subjectRows[1].id, teacherEmail, dayOfWeek: 4, startTime: "10:30", endTime: "11:15", room: "Room 12" },
     { classId: classRows[1].id, subjectId: subjectRows[2].id, teacherEmail, dayOfWeek: 4, startTime: "13:20", endTime: "14:05", room: "School Farm" },
-  ]);
-  await db.insert(announcements).values({ title: "Welcome to the new PurpleStars portal", body: "Explore the connected learning, attendance and assessment tools prepared for our school community.", audience: "all", priority: "important", publishedBy: adminEmail });
-  await db.insert(schoolEvents).values({ title: "Inter-house Sports Day", description: "Annual sports day for all houses.", startAt: "2026-07-24T10:00:00Z", endAt: "2026-07-24T16:00:00Z", location: "Main field", audience: "all", createdBy: adminEmail });
-  return { seeded: true, session: session.name, term: term.name, classes: classRows.length, subjects: subjectRows.length, students: demoStudents.length };
+  ];
+  const existingTimetable = await db.select().from(timetableEntries);
+  for (const definition of timetableDefinitions) {
+    const exists = existingTimetable.some((item) => item.classId === definition.classId && item.subjectId === definition.subjectId && item.teacherEmail === definition.teacherEmail && item.dayOfWeek === definition.dayOfWeek && item.startTime === definition.startTime);
+    if (!exists) {
+      await db.insert(timetableEntries).values(definition);
+      created.timetable += 1;
+    }
+  }
+
+  const existingAnnouncements = await db.select().from(announcements);
+  if (!existingAnnouncements.some((item) => item.title === "Welcome to the new PurpleStars portal")) {
+    await db.insert(announcements).values({ title: "Welcome to the new PurpleStars portal", body: "Explore the connected learning, attendance and assessment tools prepared for our school community.", audience: "all", priority: "important", publishedBy: adminEmail });
+    created.announcements += 1;
+  }
+  const existingEvents = await db.select().from(schoolEvents);
+  if (!existingEvents.some((item) => item.title === "Inter-house Sports Day")) {
+    await db.insert(schoolEvents).values({ title: "Inter-house Sports Day", description: "Annual sports day for all houses.", startAt: "2026-07-24T10:00:00Z", endAt: "2026-07-24T16:00:00Z", location: "Main field", audience: "all", createdBy: adminEmail });
+    created.events += 1;
+  }
+  return { seeded: true, ready: true, created, session: session.name, term: term.name, classes: classRows.length, subjects: subjectRows.length, students: demoStudents.length };
 }

@@ -116,8 +116,11 @@ test("complete school operations share one academic data model", async () => {
   ]);
   for (const table of ["academicSessions", "academicTerms", "schoolClasses", "subjects", "teacherAssignments", "timetableEntries", "attendanceRecords", "assignments", "assignmentSubmissions", "resultRecords", "reportCards", "announcements", "schoolEvents", "supportTickets"]) assert.match(schema, new RegExp(table));
   assert.match(schoolApi, /demo\.seed/);
+  assert.match(schoolApi, /missingPeople/);
   assert.match(schoolApi, /Inter-house Sports Day/);
   assert.match(operations, /Academic setup/);
+  assert.match(operations, /Load investor demo data/);
+  assert.match(operations, /Refresh investor demo data/);
   assert.match(operations, /Mark student attendance/);
   assert.match(operations, /Enter CA and examination scores/);
   assert.match(operations, /Create an assignment/);
