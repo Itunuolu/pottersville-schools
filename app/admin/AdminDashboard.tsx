@@ -2,6 +2,7 @@
 
 import { Activity, BookOpen, CheckCircle2, ChevronRight, GraduationCap, LayoutDashboard, LoaderCircle, LogOut, Plus, Search, ShieldCheck, Sparkles, UserCog, Users, X } from "lucide-react";
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
+import { BulkAccountImporter } from "./BulkAccountImporter";
 
 type PortalUserRow = {
   id: number;
@@ -85,11 +86,11 @@ export default function AdminDashboard({ currentUser }: { currentUser: { display
     <div className="admin-shell">
       <aside className="admin-sidebar">
         <a className="brand admin-brand" href="/admin"><span className="brand-mark"><Sparkles size={19} /></span><span className="brand-copy">PurpleStars<small>Admin portal</small></span></a>
-        <nav><a className="active" href="/admin"><LayoutDashboard size={17} />Overview</a><a href="#accounts"><Users size={17} />User accounts</a><a href="/teacher"><BookOpen size={17} />Teacher workspace</a><a href="/student"><GraduationCap size={17} />Student preview</a></nav>
+        <nav><a className="active" href="/admin"><LayoutDashboard size={17} />Overview</a><a href="#accounts"><Users size={17} />User accounts</a><a href="/operations"><Activity size={17} />School operations</a><a href="/teacher"><BookOpen size={17} />Teacher workspace</a><a href="/student"><GraduationCap size={17} />Student preview</a></nav>
         <div className="admin-user"><span>{initials}</span><div><strong>{currentUser.displayName}</strong><small>Administrator</small></div><a href="/signout-with-chatgpt?return_to=%2Flogin" aria-label="Sign out"><LogOut size={16} /></a></div>
       </aside>
       <main className="admin-main">
-        <header className="admin-topbar"><div><p className="eyebrow">School administration</p><h1>Welcome, {currentUser.displayName.split(/\s+/)[0]}.</h1><p>Manage secure access for every student, teacher and administrator.</p></div><button type="button" onClick={() => setAddOpen(true)}><Plus size={16} />Add school account</button></header>
+        <header className="admin-topbar"><div><p className="eyebrow">School administration</p><h1>Welcome, {currentUser.displayName.split(/\s+/)[0]}.</h1><p>Manage secure access for every student, teacher and administrator.</p></div><div className="admin-top-actions"><BulkAccountImporter onComplete={(text, error) => { showMessage(error ? "error" : "success", text); if (!error) void loadUsers(); }} /><button type="button" onClick={() => setAddOpen(true)}><Plus size={16} />Add school account</button></div></header>
         {message && <div className={`admin-message ${message.tone}`}><CheckCircle2 size={16} />{message.text}</div>}
         <section className="admin-stat-grid" aria-label="Account summary"><article><span className="admin-stat-icon student"><GraduationCap size={19} /></span><div><strong>{counts.students}</strong><small>Active students</small></div></article><article><span className="admin-stat-icon teacher"><BookOpen size={18} /></span><div><strong>{counts.teachers}</strong><small>Active teachers</small></div></article><article><span className="admin-stat-icon"><ShieldCheck size={18} /></span><div><strong>{counts.admins}</strong><small>Administrators</small></div></article><article><span className="admin-stat-icon suspended"><Activity size={18} /></span><div><strong>{counts.suspended}</strong><small>Suspended</small></div></article></section>
         <section className="admin-accounts panel" id="accounts">

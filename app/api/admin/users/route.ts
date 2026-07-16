@@ -16,7 +16,20 @@ export async function POST(request: Request) {
   if (admin instanceof Response) return admin;
 
   try {
-    const payload = (await request.json()) as { email?: string; displayName?: string; role?: PortalRole; className?: string };
+    const payload = (await request.json()) as { email?: string; displayName?: string; role?: PortalRole; className?: string; users?: { email?: string; displayName?: string; role?: PortalRole; className?: string }[] };
+    if (Array.isArray(payload.users)) {
+      if (!payload.users.length || payload.users.length > 250) return Response.json({ error: "Import between 1 and 250 accounts at once." }, { status: 400 });
+      const normalized = payload.users.map((item, index) => {
+        const email = item.email?.trim().toLowerCase() ?? "", displayName = item.displayName?.trim() ?? "", role = item.role;
+        if (!/^\S+@\S+\.\S+$/.test(email) || !displayName || !role || !roles.includes(role)) throw new Error(`Row ${index + 2} has an invalid name, email or role.`);
+        if (role === "student" && !item.className?.trim()) throw new Error(`Row ${index + 2} needs a class for the student.`);
+        return { email, displayName, role, className: role === "student" ? item.className!.trim() : null, createdBy: admin.email };
+      });
+      const db = getDb();
+      await db.insert(portalUsers).values(normalized).onConflictDoNothing();
+      await db.insert(accessAuditLogs).values({ actorEmail: admin.email, action: "users.imported", targetEmail: admin.email, detailJson: JSON.stringify({ count: normalized.length }) });
+      return Response.json({ imported: normalized.length }, { status: 201 });
+    }
     const email = payload.email?.trim().toLowerCase() ?? "";
     const displayName = payload.displayName?.trim() ?? "";
     const role = payload.role;
@@ -45,6 +58,7 @@ export async function POST(request: Request) {
     });
     return Response.json({ user }, { status: 201 });
   } catch (error) {
+    if (error instanceof Error && error.message.startsWith("Row ")) return Response.json({ error: error.message }, { status: 400 });
     const message = error instanceof Error ? error.message.toLowerCase() : "";
     if (message.includes("unique") || message.includes("constraint")) {
       return Response.json({ error: "An account with this email already exists." }, { status: 409 });

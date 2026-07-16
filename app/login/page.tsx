@@ -40,6 +40,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
           <a className="school-signin-button" href={signInHref}><ShieldCheck size={18} /><span><strong>Continue to school portal</strong><small>Secure identity verification</small></span><ArrowRight size={18} /></a>
           <div className="login-security-note"><ShieldCheck size={15} /><span><strong>Your account stays protected</strong><small>PurpleStars never sees or stores your sign-in password.</small></span></div>
           <p className="login-help">Need access? Contact the school administrator to activate your email and assign your role.</p>
+          <a className="login-tour-link" href="/tour">View the investor product tour <ArrowRight size={14} /></a>
         </div>
       </section>
     </main>

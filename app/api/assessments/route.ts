@@ -30,6 +30,11 @@ export async function GET(request: Request) {
         className: assessments.className,
         durationMinutes: assessments.durationMinutes,
         passMark: assessments.passMark,
+        opensAt: assessments.opensAt,
+        closesAt: assessments.closesAt,
+        attemptLimit: assessments.attemptLimit,
+        randomizeQuestions: assessments.randomizeQuestions,
+        status: assessments.status,
         createdAt: assessments.createdAt,
       })
       .from(assessments)
@@ -42,7 +47,9 @@ export async function GET(request: Request) {
       return map;
     }, {});
 
-    return Response.json({ assessments: rows.map((row) => ({ ...row, questionCount: counts[row.id] ?? 0 })) });
+    const now = Date.now();
+    const visible = user.role === "student" ? rows.filter((row) => row.status === "published" && (!row.opensAt || new Date(row.opensAt).getTime() <= now) && (!row.closesAt || new Date(row.closesAt).getTime() >= now)) : rows;
+    return Response.json({ assessments: visible.map((row) => ({ ...row, questionCount: counts[row.id] ?? 0 })) });
   } catch (error) {
     return apiError(error);
   }
@@ -61,6 +68,11 @@ export async function POST(request: Request) {
       className?: string;
       durationMinutes?: number;
       passMark?: number;
+      opensAt?: string;
+      closesAt?: string;
+      attemptLimit?: number;
+      randomizeQuestions?: boolean;
+      status?: "draft" | "scheduled" | "published" | "closed";
       questions?: QuestionInput[];
     };
 
@@ -106,6 +118,11 @@ export async function POST(request: Request) {
         className,
         durationMinutes,
         passMark,
+        opensAt: payload.opensAt || null,
+        closesAt: payload.closesAt || null,
+        attemptLimit: Math.min(10, Math.max(1, Math.round(Number(payload.attemptLimit) || 1))),
+        randomizeQuestions: Boolean(payload.randomizeQuestions),
+        status: ["draft", "scheduled", "published", "closed"].includes(String(payload.status)) ? payload.status! : "published",
         createdBy: user.email,
       })
       .returning();

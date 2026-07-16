@@ -13,7 +13,7 @@ export async function GET(request: Request) {
   try {
     const visibility = user.role === "student"
       ? and(eq(lessonNotes.published, true), eq(lessonNotes.className, user.className || "__unassigned__"))
-      : eq(lessonNotes.published, true);
+      : user.role === "teacher" ? eq(lessonNotes.uploadedBy, user.email) : undefined;
     const rows = await getDb()
       .select({
         id: lessonNotes.id,
@@ -21,6 +21,10 @@ export async function GET(request: Request) {
         description: lessonNotes.description,
         subject: lessonNotes.subject,
         className: lessonNotes.className,
+        termId: lessonNotes.termId,
+        week: lessonNotes.week,
+        topic: lessonNotes.topic,
+        published: lessonNotes.published,
         fileName: lessonNotes.fileName,
         fileSize: lessonNotes.fileSize,
         createdAt: lessonNotes.createdAt,
@@ -75,6 +79,9 @@ export async function POST(request: Request) {
         title,
         subject,
         className,
+        termId: Number(form.get("termId")) || null,
+        week: Number(form.get("week")) || null,
+        topic: String(form.get("topic") || "").trim(),
         description,
         fileKey: uploadedKey,
         fileName: safeFileName(file.name),
@@ -87,6 +94,10 @@ export async function POST(request: Request) {
         description: lessonNotes.description,
         subject: lessonNotes.subject,
         className: lessonNotes.className,
+        termId: lessonNotes.termId,
+        week: lessonNotes.week,
+        topic: lessonNotes.topic,
+        published: lessonNotes.published,
         fileName: lessonNotes.fileName,
         fileSize: lessonNotes.fileSize,
         createdAt: lessonNotes.createdAt,
@@ -99,4 +110,34 @@ export async function POST(request: Request) {
     }
     return apiError(error);
   }
+}
+
+export async function PATCH(request: Request) {
+  const user = await requireApiRole(request, ["admin", "teacher"]);
+  if (user instanceof Response) return user;
+  try {
+    const payload = (await request.json()) as { id?: number; title?: string; description?: string; subject?: string; className?: string; topic?: string; week?: number; termId?: number; published?: boolean };
+    const id = Number(payload.id);
+    if (!id) return Response.json({ error: "Invalid lesson note." }, { status: 400 });
+    const db = getDb();
+    const [existing] = await db.select().from(lessonNotes).where(eq(lessonNotes.id, id)).limit(1);
+    if (!existing || (user.role === "teacher" && existing.uploadedBy !== user.email)) return Response.json({ error: "You cannot edit this lesson note." }, { status: 403 });
+    const [note] = await db.update(lessonNotes).set({ title: payload.title?.trim() || existing.title, description: payload.description?.trim() ?? existing.description, subject: payload.subject?.trim() || existing.subject, className: payload.className?.trim() || existing.className, topic: payload.topic?.trim() ?? existing.topic, week: Number(payload.week) || existing.week, termId: Number(payload.termId) || existing.termId, published: typeof payload.published === "boolean" ? payload.published : existing.published }).where(eq(lessonNotes.id, id)).returning();
+    return Response.json({ note });
+  } catch (error) { return apiError(error); }
+}
+
+export async function DELETE(request: Request) {
+  const user = await requireApiRole(request, ["admin", "teacher"]);
+  if (user instanceof Response) return user;
+  try {
+    const id = Number(new URL(request.url).searchParams.get("id"));
+    if (!id) return Response.json({ error: "Invalid lesson note." }, { status: 400 });
+    const db = getDb();
+    const [existing] = await db.select().from(lessonNotes).where(eq(lessonNotes.id, id)).limit(1);
+    if (!existing || (user.role === "teacher" && existing.uploadedBy !== user.email)) return Response.json({ error: "You cannot delete this lesson note." }, { status: 403 });
+    await getPlatformEnv().LESSON_FILES.delete(existing.fileKey);
+    await db.delete(lessonNotes).where(eq(lessonNotes.id, id));
+    return Response.json({ deleted: true });
+  } catch (error) { return apiError(error); }
 }

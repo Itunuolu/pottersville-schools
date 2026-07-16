@@ -174,7 +174,7 @@ export default function StudentDashboard({ user }: StudentDashboardProps) {
     <div className="student-app">
       <header className="student-topbar">
         <a className="student-brand" href="/"><span><Sparkles size={18} /></span><strong>PurpleStars<small>Student learning portal</small></strong></a>
-        <div className="student-account"><span>{initials}</span><div><strong>{user.displayName}</strong><small>{user.role === "student" ? `${user.className || "Class pending"} · Student` : `${user.role} preview`}</small></div><a href="/signout-with-chatgpt?return_to=%2Flogin">Sign out</a></div>
+        <div className="student-account"><a className="student-avatar-link" href="/profile">{initials}</a><div><strong>{user.displayName}</strong><small>{user.role === "student" ? `${user.className || "Class pending"} · Student` : `${user.role} preview`}</small></div><a href="/signout-with-chatgpt?return_to=%2Flogin">Sign out</a></div>
       </header>
 
       <main className="student-main">
@@ -188,6 +188,7 @@ export default function StudentDashboard({ user }: StudentDashboardProps) {
           <button className={activeTab === "notes" ? "active" : ""} type="button" onClick={() => setActiveTab("notes")}><BookOpen size={16} />Lesson notes<span>{notes.length}</span></button>
           <button className={activeTab === "assessments" ? "active" : ""} type="button" onClick={() => setActiveTab("assessments")}><GraduationCap size={17} />Quizzes & exams<span>{assessments.length}</span></button>
         </nav>
+        <a className="student-operations-link" href="/operations"><Sparkles size={16} /><span><strong>Open my complete school workspace</strong><small>Attendance, assignments, report cards, announcements and support</small></span><ArrowLeft className="forward" size={15} /></a>
 
         {error && <div className="student-error" role="alert"><X size={16} />{error}<button type="button" onClick={() => setError("")}>Dismiss</button></div>}
 

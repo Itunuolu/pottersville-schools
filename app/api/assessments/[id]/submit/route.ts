@@ -1,4 +1,4 @@
-import { asc, eq } from "drizzle-orm";
+import { and, asc, count, eq } from "drizzle-orm";
 import { getDb } from "../../../../../db";
 import { assessments, attempts, questions } from "../../../../../db/schema";
 import { apiError } from "../../../../../lib/platform";
@@ -18,7 +18,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
 
     const db = getDb();
     const [assessment] = await db
-      .select({ id: assessments.id, passMark: assessments.passMark, className: assessments.className })
+      .select({ id: assessments.id, passMark: assessments.passMark, className: assessments.className, status: assessments.status, opensAt: assessments.opensAt, closesAt: assessments.closesAt, attemptLimit: assessments.attemptLimit })
       .from(assessments)
       .where(eq(assessments.id, assessmentId))
       .limit(1);
@@ -26,6 +26,10 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
     if (assessment.className !== user.className) {
       return Response.json({ error: "This assessment is not assigned to your class." }, { status: 403 });
     }
+    const now = Date.now();
+    if (assessment.status !== "published" || (assessment.opensAt && new Date(assessment.opensAt).getTime() > now) || (assessment.closesAt && new Date(assessment.closesAt).getTime() < now)) return Response.json({ error: "This assessment is not currently open." }, { status: 403 });
+    const [{ value: attemptCount }] = await db.select({ value: count() }).from(attempts).where(and(eq(attempts.assessmentId, assessmentId), eq(attempts.studentEmail, user.email)));
+    if (attemptCount >= assessment.attemptLimit) return Response.json({ error: `You have used all ${assessment.attemptLimit} allowed attempt${assessment.attemptLimit === 1 ? "" : "s"}.` }, { status: 409 });
 
     const rows = await db
       .select({ id: questions.id, correctOption: questions.correctOption, points: questions.points })

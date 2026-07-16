@@ -52,6 +52,7 @@ const navigation: { label: string; items: PortalItem[] }[] = [
     label: "Workspace",
     items: [
       { label: "Overview", description: "Your daily dashboard", href: "#dashboard-main", icon: LayoutDashboard },
+      { label: "School operations", description: "Attendance, results and assignments", href: "/operations", icon: Sparkles },
       { label: "My classes", description: "Assigned classes and subjects", href: `${portal}/staff/my-assignments/`, icon: GraduationCap },
       { label: "Students", description: "View students in your classes", href: `${portal}/students/student_list/`, icon: Users },
       { label: "Attendance", description: "Mark and review attendance", href: `${portal}/attendance/take-attendance/`, icon: ClipboardCheck },
@@ -105,7 +106,7 @@ const quickActions: PortalItem[] = [
   },
 ];
 
-const stats = [
+const defaultStats = [
   { label: "My students", value: "28", context: "across 3 classes", icon: Users, tone: "violet" },
   { label: "Classes today", value: "3", context: "next at 10:30 AM", icon: GraduationCap, tone: "violet" },
   { label: "Attendance", value: "92%", context: "↑ 3% this week", icon: ClipboardCheck, tone: "green" },
@@ -132,6 +133,7 @@ export default function TeacherDashboard({ user }: TeacherDashboardProps) {
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [selectedAction, setSelectedAction] = useState<PortalItem | null>(null);
+  const [liveStats, setLiveStats] = useState<any>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const firstName = user.displayName.split(/\s+/)[0] || "Teacher";
   const initials = user.displayName.split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]?.toUpperCase()).join("") || "PS";
@@ -182,6 +184,10 @@ export default function TeacherDashboard({ user }: TeacherDashboardProps) {
     if (!searchOpen) setQuery("");
   }, [searchOpen]);
 
+  useEffect(() => {
+    fetch("/api/dashboard", { cache: "no-store" }).then((response) => response.ok ? response.json() : null).then((payload) => payload && setLiveStats(payload.stats)).catch(() => undefined);
+  }, []);
+
   const closeMobileNavigation = () => setSidebarOpen(false);
 
   return (
@@ -211,7 +217,7 @@ export default function TeacherDashboard({ user }: TeacherDashboardProps) {
                 {group.items.map((item) => {
                   const Icon = item.icon;
                   const isOverview = item.href === "#dashboard-main";
-                  const isInternal = item.href.startsWith("#");
+                  const isInternal = item.href.startsWith("#") || item.href.startsWith("/");
                   return (
                     <a
                       className={`nav-item${isOverview ? " active" : ""}`}
@@ -301,7 +307,8 @@ export default function TeacherDashboard({ user }: TeacherDashboardProps) {
                 <div className="popover profile-popover">
                   <div className="profile-summary"><span className="avatar">{initials}</span><span><strong>{user.displayName}</strong><small>{user.email} · {user.role}</small></span></div>
                   {user.role === "admin" && <a href="/admin"><Settings size={16} />Admin workspace</a>}
-                  <a href="/signout-with-chatgpt?return_to=%2Flogin"><UserRound size={16} />Sign out</a>
+                  <a href="/profile"><UserRound size={16} />My profile & ID card</a>
+                  <a href="/signout-with-chatgpt?return_to=%2Flogin"><Settings size={16} />Sign out</a>
                 </div>
               )}
             </div>
@@ -318,7 +325,12 @@ export default function TeacherDashboard({ user }: TeacherDashboardProps) {
         </section>
 
         <section className="stats-grid" aria-label="Today at a glance">
-          {stats.map((stat) => {
+          {(liveStats ? [
+            { ...defaultStats[0], value: String(liveStats.students ?? 0), context: `across ${liveStats.assignedClasses ?? 0} classes` },
+            { ...defaultStats[1], value: String(liveStats.assignedClasses ?? 0), context: `${liveStats.assignedSubjects ?? 0} subjects` },
+            { ...defaultStats[2], value: String(liveStats.attendanceMarked ?? 0), context: "records marked today" },
+            { ...defaultStats[3], value: String(liveStats.pendingResults ?? 0), context: "awaiting completion" },
+          ] : defaultStats).map((stat) => {
             const Icon = stat.icon;
             return (
               <article className="stat-card" key={stat.label}>
@@ -401,7 +413,7 @@ export default function TeacherDashboard({ user }: TeacherDashboardProps) {
               </div>
             </section>
 
-            <section className="help-strip">
+          <section className="help-strip">
               <span className="help-icon"><CircleHelp size={18} /></span>
               <span><strong>Need a hand?</strong><small>Browse guides or contact support.</small></span>
               <a href={`${portal}/help-center/`} target="_blank" rel="noreferrer" aria-label="Open help centre"><ChevronRight size={17} /></a>
@@ -424,6 +436,11 @@ export default function TeacherDashboard({ user }: TeacherDashboardProps) {
             </div>
             <div className="search-footer"><span><kbd>↑</kbd><kbd>↓</kbd> Browse</span><span><kbd>Esc</kbd> Close</span></div>
           </section>
+          <a className="help-strip operations-strip" href="/operations">
+            <span className="help-icon"><Sparkles size={18} /></span>
+            <span><strong>Open school operations</strong><small>Attendance, results, assignments and updates.</small></span>
+            <ChevronRight size={17} />
+          </a>
         </div>
       )}
 

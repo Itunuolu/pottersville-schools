@@ -107,3 +107,63 @@ test("owner recovery prevents an administrator activation dead end", async () =>
   assert.match(migration, /`role` = 'admin'/);
   assert.match(migration, /`status` = 'active'/);
 });
+
+test("complete school operations share one academic data model", async () => {
+  const [schema, schoolApi, operations] = await Promise.all([
+    readFile(new URL("db/schema.ts", root), "utf8"),
+    readFile(new URL("app/api/school-data/route.ts", root), "utf8"),
+    readFile(new URL("app/operations/OperationsPortal.tsx", root), "utf8"),
+  ]);
+  for (const table of ["academicSessions", "academicTerms", "schoolClasses", "subjects", "teacherAssignments", "timetableEntries", "attendanceRecords", "assignments", "assignmentSubmissions", "resultRecords", "reportCards", "announcements", "schoolEvents", "supportTickets"]) assert.match(schema, new RegExp(table));
+  assert.match(schoolApi, /demo\.seed/);
+  assert.match(schoolApi, /Inter-house Sports Day/);
+  assert.match(operations, /Academic setup/);
+  assert.match(operations, /Mark student attendance/);
+  assert.match(operations, /Enter CA and examination scores/);
+  assert.match(operations, /Create an assignment/);
+  assert.match(operations, /Publish an announcement/);
+  assert.match(operations, /Ask for help/);
+});
+
+test("attendance, results and assignments enforce role and class boundaries", async () => {
+  const [attendance, results, assignments] = await Promise.all([
+    readFile(new URL("app/api/attendance/route.ts", root), "utf8"),
+    readFile(new URL("app/api/results/route.ts", root), "utf8"),
+    readFile(new URL("app/api/assignments/route.ts", root), "utf8"),
+  ]);
+  assert.match(attendance, /This class is not assigned to you/);
+  assert.match(attendance, /onConflictDoUpdate/);
+  assert.match(results, /Only administrators can approve report cards/);
+  assert.match(results, /gradeFor\(total\)/);
+  assert.match(assignments, /Only student accounts can submit assignments/);
+  assert.match(assignments, /This assignment is not available to your class/);
+});
+
+test("lesson and assessment lifecycle supports stakeholder-ready controls", async () => {
+  const [lessons, assessment, submit, studio] = await Promise.all([
+    readFile(new URL("app/api/lesson-notes/route.ts", root), "utf8"),
+    readFile(new URL("app/api/assessments/route.ts", root), "utf8"),
+    readFile(new URL("app/api/assessments/[id]/submit/route.ts", root), "utf8"),
+    readFile(new URL("app/components/LearningStudio.tsx", root), "utf8"),
+  ]);
+  assert.match(lessons, /export async function PATCH/);
+  assert.match(lessons, /export async function DELETE/);
+  assert.match(assessment, /randomizeQuestions/);
+  assert.match(assessment, /attemptLimit/);
+  assert.match(submit, /used all/);
+  assert.match(studio, /Randomize question order/);
+  assert.match(studio, /Lesson note deleted/);
+});
+
+test("investor presentation flow and bulk onboarding are included", async () => {
+  const [tour, importer, userApi] = await Promise.all([
+    readFile(new URL("app/tour/page.tsx", root), "utf8"),
+    readFile(new URL("app/admin/BulkAccountImporter.tsx", root), "utf8"),
+    readFile(new URL("app/api/admin/users/route.ts", root), "utf8"),
+  ]);
+  assert.match(tour, /The connected school operating system/);
+  assert.match(tour, /Complete working flows/);
+  assert.match(importer, /\.xlsx/);
+  assert.match(importer, /school-accounts-template\.csv/);
+  assert.match(userApi, /Import between 1 and 250 accounts/);
+});

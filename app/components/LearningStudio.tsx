@@ -27,6 +27,10 @@ type LessonNote = {
   fileName: string;
   fileSize: number;
   createdAt: string;
+  termId: number | null;
+  week: number | null;
+  topic: string;
+  published: boolean;
 };
 
 type Assessment = {
@@ -38,6 +42,11 @@ type Assessment = {
   durationMinutes: number;
   passMark: number;
   questionCount: number;
+  opensAt: string | null;
+  closesAt: string | null;
+  attemptLimit: number;
+  randomizeQuestions: boolean;
+  status: "draft" | "scheduled" | "published" | "closed";
 };
 
 export type QuestionDraft = {
@@ -76,15 +85,18 @@ export function LearningStudio() {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ tone: "success" | "error"; text: string } | null>(null);
   const [questions, setQuestions] = useState<QuestionDraft[]>([newQuestion(), newQuestion()]);
+  const [terms, setTerms] = useState<{ id: number; name: string; isCurrent: boolean }[]>([]);
 
   const loadContent = useCallback(async () => {
     try {
-      const [notesResponse, assessmentsResponse] = await Promise.all([
+      const [notesResponse, assessmentsResponse, schoolResponse] = await Promise.all([
         fetch("/api/lesson-notes", { cache: "no-store" }),
         fetch("/api/assessments", { cache: "no-store" }),
+        fetch("/api/school-data", { cache: "no-store" }),
       ]);
       if (notesResponse.ok) setNotes(((await notesResponse.json()) as { notes: LessonNote[] }).notes);
       if (assessmentsResponse.ok) setAssessments(((await assessmentsResponse.json()) as { assessments: Assessment[] }).assessments);
+      if (schoolResponse.ok) setTerms(((await schoolResponse.json()) as { terms: { id: number; name: string; isCurrent: boolean }[] }).terms);
     } finally {
       setLoading(false);
     }
@@ -131,6 +143,11 @@ export function LearningStudio() {
           className: form.get("className"),
           durationMinutes: Number(form.get("durationMinutes")),
           passMark: Number(form.get("passMark")),
+          opensAt: form.get("opensAt"),
+          closesAt: form.get("closesAt"),
+          attemptLimit: Number(form.get("attemptLimit")),
+          randomizeQuestions: form.get("randomizeQuestions") === "on",
+          status: form.get("status"),
           questions,
         }),
       });
@@ -157,6 +174,17 @@ export function LearningStudio() {
     }));
   };
 
+  const manageNote = async (note: LessonNote, action: "toggle" | "delete") => {
+    setSaving(true);
+    try {
+      const response = action === "delete" ? await fetch(`/api/lesson-notes?id=${note.id}`, { method: "DELETE" }) : await fetch("/api/lesson-notes", { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify({ id: note.id, published: !note.published }) });
+      if (!response.ok) throw new Error(await readError(response));
+      showMessage("success", action === "delete" ? "Lesson note deleted." : note.published ? "Lesson note unpublished." : "Lesson note published.");
+      await loadContent();
+    } catch (error) { showMessage("error", error instanceof Error ? error.message : "Lesson note could not be updated."); }
+    finally { setSaving(false); }
+  };
+
   return (
     <section className="learning-studio panel" id="learning-studio" aria-labelledby="learning-studio-title">
       <div className="learning-studio-header">
@@ -181,8 +209,8 @@ export function LearningStudio() {
             {loading ? <div className="studio-loading"><LoaderCircle className="spin" size={18} />Loading notes…</div> : notes.length ? notes.slice(0, 3).map((note) => (
               <article className="studio-row" key={note.id}>
                 <span className="row-file-icon"><FileText size={17} /></span>
-                <div><strong>{note.title}</strong><span>{note.subject} · {note.className} · {formatFileSize(note.fileSize)}</span></div>
-                <a href={`/api/lesson-notes/${note.id}/file`} target="_blank" rel="noreferrer" aria-label={`Open ${note.title}`}><ChevronRight size={16} /></a>
+                <div><strong>{note.title}</strong><span>{note.subject} · {note.className}{note.week ? ` · Week ${note.week}` : ""} · {formatFileSize(note.fileSize)}</span></div>
+                <span className="note-row-actions"><button type="button" title={note.published ? "Unpublish" : "Publish"} onClick={() => void manageNote(note, "toggle")}><CheckCircle2 size={14} /></button><a href={`/api/lesson-notes/${note.id}/file`} target="_blank" rel="noreferrer" aria-label={`Open ${note.title}`}><ChevronRight size={16} /></a><button className="danger" type="button" title="Delete note" onClick={() => window.confirm(`Delete ${note.title}?`) && void manageNote(note, "delete")}><Trash2 size={14} /></button></span>
               </article>
             )) : <div className="studio-empty"><BookOpen size={20} /><span><strong>No lesson notes yet</strong>Upload your first PDF for students.</span></div>}
           </div>
@@ -217,6 +245,8 @@ export function LearningStudio() {
             <form className="studio-form" onSubmit={uploadLessonNote}>
               <label><span>Lesson title</span><input name="title" required maxLength={120} placeholder="e.g. Photosynthesis — Week 10" /></label>
               <div className="form-grid two"><label><span>Subject</span><input name="subject" required maxLength={80} placeholder="Biology" /></label><label><span>Class</span><input name="className" required maxLength={40} placeholder="SS 1B" /></label></div>
+              <div className="form-grid two"><label><span>Term</span><select name="termId"><option value="">No term</option>{terms.map((term) => <option value={term.id} key={term.id}>{term.name}{term.isCurrent ? " (current)" : ""}</option>)}</select></label><label><span>Week</span><input name="week" type="number" min="1" max="20" placeholder="10" /></label></div>
+              <label><span>Topic <em>optional</em></span><input name="topic" maxLength={120} placeholder="Photosynthesis and leaf structure" /></label>
               <label><span>Short description <em>optional</em></span><textarea name="description" rows={3} maxLength={300} placeholder="What students will learn from this note" /></label>
               <label className="file-drop"><Upload size={22} /><span><strong>Choose lesson note PDF</strong><small>PDF only · Maximum 8 MB</small></span><input name="file" type="file" accept="application/pdf,.pdf" required /></label>
               <div className="dialog-actions"><button type="button" disabled={saving} onClick={() => setUploadOpen(false)}>Cancel</button><button className="solid-action" type="submit" disabled={saving}>{saving ? <><LoaderCircle className="spin" size={15} />Publishing…</> : <><Upload size={15} />Publish note</>}</button></div>
@@ -233,6 +263,8 @@ export function LearningStudio() {
               <div className="assessment-meta-card">
                 <div className="form-grid two"><label><span>Assessment title</span><input name="title" required maxLength={120} placeholder="Biology Week 10 Quiz" /></label><label><span>Type</span><select name="assessmentType"><option value="quiz">Quiz</option><option value="exam">Exam</option></select></label></div>
                 <div className="form-grid four"><label><span>Subject</span><input name="subject" required placeholder="Biology" /></label><label><span>Class</span><input name="className" required placeholder="SS 1B" /></label><label><span>Duration</span><div className="input-suffix"><input name="durationMinutes" type="number" min="1" max="180" defaultValue="15" required /><span>min</span></div></label><label><span>Pass mark</span><div className="input-suffix"><input name="passMark" type="number" min="0" max="100" defaultValue="50" required /><span>%</span></div></label></div>
+                <div className="form-grid four"><label><span>Opens <em>optional</em></span><input name="opensAt" type="datetime-local" /></label><label><span>Closes <em>optional</em></span><input name="closesAt" type="datetime-local" /></label><label><span>Attempts</span><input name="attemptLimit" type="number" min="1" max="10" defaultValue="1" /></label><label><span>Publishing</span><select name="status"><option value="published">Publish now</option><option value="scheduled">Scheduled</option><option value="draft">Save draft</option></select></label></div>
+                <label className="check-row assessment-check"><input name="randomizeQuestions" type="checkbox" />Randomize question order for each student</label>
                 <label><span>Instructions <em>optional</em></span><textarea name="description" rows={2} maxLength={400} placeholder="Read each question carefully and choose the best answer." /></label>
               </div>
 

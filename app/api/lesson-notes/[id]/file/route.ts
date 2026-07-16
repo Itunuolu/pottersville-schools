@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { getDb } from "../../../../../db";
-import { lessonNotes } from "../../../../../db/schema";
+import { lessonDownloads, lessonNotes } from "../../../../../db/schema";
 import { apiError, getPlatformEnv, safeFileName } from "../../../../../lib/platform";
 import { requireApiRole } from "../../../../../lib/portal-auth";
 
@@ -31,6 +31,10 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
 
     const url = new URL(request.url);
     const disposition = url.searchParams.get("download") === "1" ? "attachment" : "inline";
+    if (user.role === "student") {
+      const action = url.searchParams.get("print") === "1" ? "print" : disposition === "attachment" ? "download" : "view";
+      await getDb().insert(lessonDownloads).values({ lessonNoteId: noteId, studentEmail: user.email, action });
+    }
     const headers = new Headers();
     object.writeHttpMetadata(headers);
     headers.set("content-type", "application/pdf");

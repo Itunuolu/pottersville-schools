@@ -26,6 +26,11 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
         className: assessments.className,
         durationMinutes: assessments.durationMinutes,
         passMark: assessments.passMark,
+        opensAt: assessments.opensAt,
+        closesAt: assessments.closesAt,
+        attemptLimit: assessments.attemptLimit,
+        randomizeQuestions: assessments.randomizeQuestions,
+        status: assessments.status,
       })
       .from(assessments)
       .where(eq(assessments.id, assessmentId))
@@ -35,6 +40,10 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
     if (user.role === "student" && assessment.className !== user.className) {
       return Response.json({ error: "This assessment is not assigned to your class." }, { status: 403 });
     }
+    if (user.role === "student") {
+      const now = Date.now();
+      if (assessment.status !== "published" || (assessment.opensAt && new Date(assessment.opensAt).getTime() > now) || (assessment.closesAt && new Date(assessment.closesAt).getTime() < now)) return Response.json({ error: "This assessment is not currently open." }, { status: 403 });
+    }
 
     const rows = await db
       .select({ id: questions.id, prompt: questions.prompt, optionsJson: questions.optionsJson, points: questions.points })
@@ -42,10 +51,11 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
       .where(eq(questions.assessmentId, assessmentId))
       .orderBy(asc(questions.position));
 
+    const visibleRows = user.role === "student" && assessment.randomizeQuestions ? [...rows].sort(() => Math.random() - 0.5) : rows;
     return Response.json({
       assessment: {
         ...assessment,
-        questions: rows.map((question) => ({ ...question, options: JSON.parse(question.optionsJson) as string[], optionsJson: undefined })),
+        questions: visibleRows.map((question) => ({ ...question, options: JSON.parse(question.optionsJson) as string[], optionsJson: undefined })),
       },
     });
   } catch (error) {
