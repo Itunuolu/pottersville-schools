@@ -1284,6 +1284,23 @@ kbd { border: 1px solid #ded5cf; border-bottom-width: 2px; border-radius: 6px; b
 .ps-promise-strip span:first-child { border-left: 0; }
 .ps-promise-strip svg { color: var(--ps-purple); }
 
+.ps-foundations { position: relative; background: #fff; }
+.ps-foundations::before { content: ""; position: absolute; left: -140px; top: 90px; width: 310px; height: 310px; border: 55px solid rgba(169, 0, 220, 0.035); border-radius: 50%; pointer-events: none; }
+.ps-foundation-grid { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.ps-foundation-grid > article { position: relative; min-height: 335px; padding: 28px; border: 1px solid rgba(63, 6, 80, 0.1); border-radius: 24px; display: flex; flex-direction: column; background: linear-gradient(155deg, #fff, #fdf9ff); box-shadow: 0 14px 38px rgba(63, 6, 80, 0.05); transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease; }
+.ps-foundation-grid > article:hover { transform: translateY(-5px); border-color: rgba(169, 0, 220, 0.22); box-shadow: 0 22px 48px rgba(63, 6, 80, 0.1); }
+.ps-foundation-icon { width: 51px; height: 51px; margin-bottom: 48px; border-radius: 16px; display: grid; place-items: center; color: var(--ps-purple); background: var(--ps-lilac-soft); }
+.ps-foundation-grid > article:nth-child(2) .ps-foundation-icon { color: #fff; background: var(--ps-purple); }
+.ps-foundation-grid > article:nth-child(3) .ps-foundation-icon { color: #fff; background: var(--ps-purple-dark); }
+.ps-foundation-label { margin: 0 0 11px !important; color: var(--ps-purple) !important; font-size: 8px !important; line-height: 1 !important; font-weight: 850 !important; letter-spacing: 0.14em; text-transform: uppercase; }
+.ps-foundation-grid h3 { margin: 0; color: var(--ps-purple-dark); font-size: 18px; line-height: 1.3; letter-spacing: -0.025em; }
+.ps-foundation-grid article > p:last-child { margin: 15px 0 0; color: var(--ps-muted); font-size: 11px; line-height: 1.72; }
+.ps-foundation-grid .ps-foundation-vision { grid-column: 1 / -1; min-height: 195px; padding: 33px 39px; border-color: transparent; flex-direction: row; align-items: center; gap: 28px; color: #fff; background: linear-gradient(120deg, var(--ps-purple-dark), #70058d 68%, var(--ps-purple)); box-shadow: 0 20px 52px rgba(63, 6, 80, 0.16); overflow: hidden; }
+.ps-foundation-vision::after { content: "✦"; margin-left: auto; color: rgba(255, 255, 255, 0.1); font-size: 145px; line-height: 0.5; transform: rotate(13deg); }
+.ps-foundation-vision .ps-foundation-icon { flex: 0 0 auto; width: 67px; height: 67px; margin: 0; color: var(--ps-purple-dark); background: var(--ps-lilac); }
+.ps-foundation-vision .ps-foundation-label { color: var(--ps-lilac) !important; }
+.ps-foundation-vision h3 { max-width: 760px; color: #fff; font-family: Georgia, "Times New Roman", serif; font-size: clamp(25px, 3vw, 37px); font-weight: 400; line-height: 1.25; letter-spacing: -0.035em; }
+
 .ps-section { padding: 116px 0; scroll-margin-top: 78px; }
 .ps-section h2 { font-size: clamp(38px, 4.5vw, 58px); line-height: 1.05; }
 .ps-section-copy { padding-left: clamp(0px, 3vw, 35px); }
@@ -1442,6 +1459,10 @@ kbd { border: 1px solid #ded5cf; border-bottom-width: 2px; border-radius: 6px; b
   .ps-promise-strip span:nth-child(3) { border-left: 0; }
   .ps-section { padding: 90px 0; }
   .ps-about-grid, .ps-curriculum-grid { grid-template-columns: 1fr; }
+  .ps-foundation-grid { grid-template-columns: 1fr; }
+  .ps-foundation-grid .ps-foundation-vision { grid-column: auto; }
+  .ps-foundation-grid > article { min-height: 280px; }
+  .ps-foundation-icon { margin-bottom: 34px; }
   .ps-about-media { width: min(540px, 90%); }
   .ps-about-media > img { aspect-ratio: 1; }
   .ps-section-copy { padding-left: 0; }
@@ -1486,6 +1507,8 @@ kbd { border: 1px solid #ded5cf; border-bottom-width: 2px; border-radius: 6px; b
   .ps-promise-strip span:first-child { border-top: 0; }
   .ps-section { padding: 72px 0; }
   .ps-section h2 { font-size: 38px; }
+  .ps-foundation-grid .ps-foundation-vision { min-height: 290px; padding: 28px; align-items: flex-start; flex-direction: column; }
+  .ps-foundation-vision::after { position: absolute; right: 8px; bottom: 15px; font-size: 105px; }
   .ps-about-media { width: calc(100% - 18px); padding-left: 14px; }
   .ps-vision-card { right: -18px; width: min(270px, 85%); }
   .ps-section-heading { margin-bottom: 35px; }

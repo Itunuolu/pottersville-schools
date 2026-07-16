@@ -73,7 +73,7 @@ export default function PublicHomePage() {
       <header className="ps-header">
         <div className="ps-utility">
           <div className="ps-container ps-utility-inner">
-            <a href="#contact"><MapPin size={14} aria-hidden="true" /> Two campuses in Lagos</a>
+            <a href="#contact"><MapPin size={14} aria-hidden="true" /> Two branches in Lagos</a>
             <div>
               <a href="mailto:purplestarsschool@gmail.com"><Mail size={14} aria-hidden="true" /> purplestarsschool@gmail.com</a>
               <a href="tel:+2348134688832"><Phone size={14} aria-hidden="true" /> 0813 468 8832</a>
@@ -116,7 +116,7 @@ export default function PublicHomePage() {
               </div>
               <div className="ps-hero-proof" aria-label="PurpleStars School at a glance">
                 <div><strong>2015</strong><span>Our journey began</span></div>
-                <div><strong>2</strong><span>Lagos campuses</span></div>
+                <div><strong>2</strong><span>Lagos branches</span></div>
                 <div><strong>3</strong><span>Learning stages</span></div>
               </div>
             </div>
@@ -143,13 +143,50 @@ export default function PublicHomePage() {
           </div>
         </section>
 
+        <section className="ps-section ps-foundations" aria-labelledby="foundations-title">
+          <div className="ps-container">
+            <div className="ps-section-heading ps-section-heading-center">
+              <p className="ps-eyebrow">What guides us</p>
+              <h2 id="foundations-title">Purpose in every part of the <em>school day.</em></h2>
+              <p>Our values shape how we teach, care for and inspire every learner at PurpleStars.</p>
+            </div>
+            <div className="ps-foundation-grid">
+              <article>
+                <span className="ps-foundation-icon"><ShieldCheck size={23} aria-hidden="true" /></span>
+                <p className="ps-foundation-label">01 · Our Mission</p>
+                <h3>Care that gives every learner room to grow.</h3>
+                <p>To provide a caring, safe, and intellectually stimulating environment rooted in Christian values, where every learner grows in wisdom, creativity and confidence.</p>
+              </article>
+              <article>
+                <span className="ps-foundation-icon"><BookOpen size={23} aria-hidden="true" /></span>
+                <p className="ps-foundation-label">02 · Our Curriculum</p>
+                <h3>Learning children understand, apply and enjoy.</h3>
+                <p>We deliver learning through themes, projects, real-life experiences, creative tasks and technology. Children don’t just memorize — they understand, apply and enjoy learning.</p>
+              </article>
+              <article>
+                <span className="ps-foundation-icon"><Heart size={23} aria-hidden="true" /></span>
+                <p className="ps-foundation-label">03 · Child&apos;s Care</p>
+                <h3>Safety, health and wellbeing built into every day.</h3>
+                <p>A safe and well-equipped environment with a fully functional sickbay, partnerships with qualified paediatricians and hospitals, hygienic restrooms with regular sanitation, and access to clean water and reliable power.</p>
+              </article>
+              <article className="ps-foundation-vision">
+                <span className="ps-foundation-icon"><Star size={23} fill="currentColor" aria-hidden="true" /></span>
+                <div>
+                  <p className="ps-foundation-label">04 · Our Vision</p>
+                  <h3>To raise global stars of character, competence, and purpose.</h3>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+
         <section className="ps-section ps-about" id="about">
           <div className="ps-container ps-about-grid">
             <div className="ps-about-media">
               <img src="/images/parents-community.jpg" alt="PurpleStars parents gathered as a school community" />
               <div className="ps-vision-card">
-                <span>Our vision</span>
-                <p>To raise global stars of character, competence and purpose.</p>
+                <span>Every child matters</span>
+                <p>Known, valued and inspired to shine.</p>
               </div>
             </div>
             <div className="ps-section-copy">
@@ -258,7 +295,7 @@ export default function PublicHomePage() {
             <div>
               <p className="ps-eyebrow ps-eyebrow-light">Admissions are open</p>
               <h2>Come and see where your child can shine.</h2>
-              <p>Talk to our admissions team, ask your questions and plan a visit to the PurpleStars campus closest to you.</p>
+              <p>Talk to our admissions team, ask your questions and plan a visit to the PurpleStars branch closest to you.</p>
             </div>
             <div className="ps-admissions-actions">
               <a className="ps-button ps-button-white" href="https://wa.me/2348134688832?text=Hello%20PurpleStars%20School%2C%20I%20would%20like%20to%20ask%20about%20admissions."><MessageCircle size={18} aria-hidden="true" /> Chat with admissions</a>
@@ -270,19 +307,19 @@ export default function PublicHomePage() {
         <section className="ps-section ps-contact" id="contact">
           <div className="ps-container">
             <div className="ps-section-heading ps-contact-heading">
-              <div><p className="ps-eyebrow">Find your PurpleStars</p><h2>Two welcoming campuses in Lagos.</h2></div>
+              <div><p className="ps-eyebrow">Find your PurpleStars</p><h2>Two welcoming branches in Lagos.</h2></div>
               <a className="ps-text-link" href="mailto:purplestarsschool@gmail.com">Email the school <Mail size={16} aria-hidden="true" /></a>
             </div>
             <div className="ps-campus-grid">
               <article>
                 <span className="ps-campus-icon"><MapPin size={20} aria-hidden="true" /></span>
-                <div><p>Campus 01</p><h3>Ogba</h3><address>11 Adenekan Salako Close,<br />Off Ijaiye Road, Ogba-Ikeja, Lagos</address></div>
-                <a href="https://maps.google.com/?q=11+Adenekan+Salako+Close+Ogba+Ikeja+Lagos" aria-label="View Ogba campus on Google Maps"><ArrowRight size={18} aria-hidden="true" /></a>
+                <div><p>Branch 01</p><h3>Ogba</h3><address>11 Adenekan Salako Close,<br />Off Ijaiye Road, Ogba-Ikeja, Lagos</address></div>
+                <a href="https://maps.google.com/?q=11+Adenekan+Salako+Close+Ogba+Ikeja+Lagos" aria-label="View Ogba branch on Google Maps"><ArrowRight size={18} aria-hidden="true" /></a>
               </article>
               <article>
                 <span className="ps-campus-icon"><MapPin size={20} aria-hidden="true" /></span>
-                <div><p>Campus 02</p><h3>New Oko Oba</h3><address>9/11 Dayo Kuye Close,<br />Off Abiodun Kuye Road, New Oko Oba, Lagos</address></div>
-                <a href="https://maps.google.com/?q=9%2F11+Dayo+Kuye+Close+New+Oko+Oba+Lagos" aria-label="View New Oko Oba campus on Google Maps"><ArrowRight size={18} aria-hidden="true" /></a>
+                <div><p>Branch 02</p><h3>New Oko Oba</h3><address>9/11 Dayo Kuye Close,<br />Off Abiodun Kuye Road, New Oko Oba, Lagos</address></div>
+                <a href="https://maps.google.com/?q=9%2F11+Dayo+Kuye+Close+New+Oko+Oba+Lagos" aria-label="View New Oko Oba branch on Google Maps"><ArrowRight size={18} aria-hidden="true" /></a>
               </article>
             </div>
           </div>
@@ -294,7 +331,7 @@ export default function PublicHomePage() {
           <div className="ps-footer-brand"><img src="/images/purplestars-logo-white.png" alt="PurpleStars School" /><p>A caring school community raising global stars of character, competence and purpose.</p></div>
           <nav aria-label="Footer navigation"><strong>Explore</strong>{navItems.slice(0, 4).map(([label, href]) => <a key={href} href={href}>{label}</a>)}</nav>
           <div><strong>Contact</strong><a href="tel:+2348134688832">0813 468 8832</a><a href="tel:+2348082621273">0808 262 1273</a><a href="mailto:purplestarsschool@gmail.com">purplestarsschool@gmail.com</a></div>
-          <div><strong>School access</strong><a href="/login">Portal login</a><a href="#admissions">Admissions enquiry</a><a href="#contact">Campus locations</a></div>
+          <div><strong>School access</strong><a href="/login">Portal login</a><a href="#admissions">Admissions enquiry</a><a href="#contact">Branch locations</a></div>
         </div>
         <div className="ps-container ps-footer-bottom"><span>© 2026 PurpleStars School. Every child matters.</span><a href="#home">Back to top ↑</a></div>
       </footer>
