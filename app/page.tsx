@@ -89,12 +89,12 @@ export default function PublicHomePage() {
             <nav className="ps-desktop-nav" aria-label="Primary navigation">
               {navItems.map(([label, href]) => <a key={href} href={href}>{label}</a>)}
             </nav>
-            <a className="ps-portal-link" href="/login">Portal login <ArrowRight size={15} aria-hidden="true" /></a>
+            <a className="ps-portal-link" href="https://purplestars-school-demo.netlify.app/">Portal login <ArrowRight size={15} aria-hidden="true" /></a>
             <details className="ps-mobile-menu">
               <summary aria-label="Open navigation"><Menu size={22} aria-hidden="true" /></summary>
               <nav aria-label="Mobile navigation">
                 {navItems.map(([label, href]) => <a key={href} href={href}>{label}<ChevronRight size={16} aria-hidden="true" /></a>)}
-                <a className="ps-mobile-portal" href="/login">Portal login <ArrowRight size={16} aria-hidden="true" /></a>
+                <a className="ps-mobile-portal" href="https://purplestars-school-demo.netlify.app/">Portal login <ArrowRight size={16} aria-hidden="true" /></a>
               </nav>
             </details>
           </div>
@@ -331,7 +331,7 @@ export default function PublicHomePage() {
           <div className="ps-footer-brand"><img src="/images/purplestars-logo-white.png" alt="PurpleStars School" /><p>A caring school community raising global stars of character, competence and purpose.</p></div>
           <nav aria-label="Footer navigation"><strong>Explore</strong>{navItems.slice(0, 4).map(([label, href]) => <a key={href} href={href}>{label}</a>)}</nav>
           <div><strong>Contact</strong><a href="tel:+2348134688832">0813 468 8832</a><a href="tel:+2348082621273">0808 262 1273</a><a href="mailto:purplestarsschool@gmail.com">purplestarsschool@gmail.com</a></div>
-          <div><strong>School access</strong><a href="/login">Portal login</a><a href="#admissions">Admissions enquiry</a><a href="#contact">Branch locations</a></div>
+          <div><strong>School access</strong><a href="https://purplestars-school-demo.netlify.app/">Portal login</a><a href="#admissions">Admissions enquiry</a><a href="#contact">Branch locations</a></div>
         </div>
         <div className="ps-container ps-footer-bottom"><span>© 2026 PurpleStars School. Every child matters.</span><a href="#home">Back to top ↑</a></div>
       </footer>
