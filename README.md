@@ -4,7 +4,7 @@ PurpleStars is a connected school operations platform for administrators, teache
 
 ## Investor showcase
 
-The public GitHub Pages showcase is served from `docs/`. It is a static, browser-safe demonstration of the product experience and includes:
+The public investor showcase is served from `docs/` and deploys to both Netlify and GitHub Pages. It is a static, browser-safe demonstration of the product experience and includes:
 
 - administrator, teacher, and student workspace previews;
 - lesson-note viewing and printing;
