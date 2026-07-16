@@ -1,6 +1,39 @@
 import { sql } from "drizzle-orm";
 import { index, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
+export const portalUsers = sqliteTable(
+  "portal_users",
+  {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    email: text("email").notNull().unique(),
+    displayName: text("display_name").notNull(),
+    role: text("role", { enum: ["admin", "teacher", "student"] }).notNull(),
+    status: text("status", { enum: ["active", "suspended"] }).notNull().default("active"),
+    className: text("class_name"),
+    schoolId: text("school_id").notNull().default("PURPLESTARS"),
+    createdBy: text("created_by").notNull(),
+    createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+    updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  },
+  (table) => [
+    index("portal_users_role_idx").on(table.role, table.status),
+    index("portal_users_class_idx").on(table.className),
+  ],
+);
+
+export const accessAuditLogs = sqliteTable(
+  "access_audit_logs",
+  {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    actorEmail: text("actor_email").notNull(),
+    action: text("action").notNull(),
+    targetEmail: text("target_email").notNull(),
+    detailJson: text("detail_json").notNull().default("{}"),
+    createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  },
+  (table) => [index("access_audit_actor_idx").on(table.actorEmail, table.createdAt)],
+);
+
 export const lessonNotes = sqliteTable(
   "lesson_notes",
   {

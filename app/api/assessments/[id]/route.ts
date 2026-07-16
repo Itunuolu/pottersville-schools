@@ -1,10 +1,11 @@
 import { asc, eq } from "drizzle-orm";
 import { getDb } from "../../../../db";
 import { assessments, questions } from "../../../../db/schema";
-import { apiError, requireRequestUser } from "../../../../lib/platform";
+import { apiError } from "../../../../lib/platform";
+import { requireApiRole } from "../../../../lib/portal-auth";
 
 export async function GET(request: Request, context: { params: Promise<{ id: string }> }) {
-  const user = requireRequestUser(request);
+  const user = await requireApiRole(request, ["admin", "teacher", "student"]);
   if (user instanceof Response) return user;
 
   try {
@@ -31,6 +32,9 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
       .limit(1);
 
     if (!assessment) return Response.json({ error: "Assessment not found." }, { status: 404 });
+    if (user.role === "student" && assessment.className !== user.className) {
+      return Response.json({ error: "This assessment is not assigned to your class." }, { status: 403 });
+    }
 
     const rows = await db
       .select({ id: questions.id, prompt: questions.prompt, optionsJson: questions.optionsJson, points: questions.points })

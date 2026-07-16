@@ -6,7 +6,7 @@ const root = new URL("../", import.meta.url);
 
 test("teacher dashboard includes both learning workflows", async () => {
   const [page, studio, schema] = await Promise.all([
-    readFile(new URL("app/page.tsx", root), "utf8"),
+    readFile(new URL("app/teacher/TeacherDashboard.tsx", root), "utf8"),
     readFile(new URL("app/components/LearningStudio.tsx", root), "utf8"),
     readFile(new URL("db/schema.ts", root), "utf8"),
   ]);
@@ -25,7 +25,7 @@ test("teacher dashboard includes both learning workflows", async () => {
 
 test("student portal supports PDF actions and immediate scoring", async () => {
   const [studentPage, submitRoute, fileRoute] = await Promise.all([
-    readFile(new URL("app/student/page.tsx", root), "utf8"),
+    readFile(new URL("app/student/StudentDashboard.tsx", root), "utf8"),
     readFile(new URL("app/api/assessments/[id]/submit/route.ts", root), "utf8"),
     readFile(new URL("app/api/lesson-notes/[id]/file/route.ts", root), "utf8"),
   ]);
@@ -55,4 +55,40 @@ test("assessment builder supports validated CSV and Excel question imports", asy
   assert.match(studio, /<ExamQuestionImporter/);
   assert.match(template, /^Question,Option A,Option B,Option C,Option D,Correct Answer,Marks/m);
   assert.match(packageJson, /"read-excel-file"/);
+});
+
+test("school authentication has protected roles and admin-controlled access", async () => {
+  const [auth, adminApi, teacherPage, studentPage, loginPage, schema, migration] = await Promise.all([
+    readFile(new URL("lib/portal-auth.ts", root), "utf8"),
+    readFile(new URL("app/api/admin/users/route.ts", root), "utf8"),
+    readFile(new URL("app/teacher/page.tsx", root), "utf8"),
+    readFile(new URL("app/student/page.tsx", root), "utf8"),
+    readFile(new URL("app/login/page.tsx", root), "utf8"),
+    readFile(new URL("db/schema.ts", root), "utf8"),
+    readFile(new URL("drizzle/0001_sad_vapor.sql", root), "utf8"),
+  ]);
+
+  assert.match(auth, /requirePortalRole/);
+  assert.match(auth, /requireApiRole/);
+  assert.match(auth, /bootstrapFirstAdmin/);
+  assert.match(adminApi, /You cannot remove your own administrator access/);
+  assert.match(teacherPage, /\["teacher", "admin"\]/);
+  assert.match(studentPage, /\["student", "teacher", "admin"\]/);
+  assert.match(loginPage, /\/signin-with-chatgpt/);
+  assert.match(schema, /portalUsers/);
+  assert.match(schema, /accessAuditLogs/);
+  assert.match(migration, /CREATE TABLE `portal_users`/);
+  assert.match(migration, /CREATE TABLE `access_audit_logs`/);
+});
+
+test("role checks guard every content mutation", async () => {
+  const [lessonRoute, assessmentRoute, submitRoute] = await Promise.all([
+    readFile(new URL("app/api/lesson-notes/route.ts", root), "utf8"),
+    readFile(new URL("app/api/assessments/route.ts", root), "utf8"),
+    readFile(new URL("app/api/assessments/[id]/submit/route.ts", root), "utf8"),
+  ]);
+  assert.match(lessonRoute, /requireApiRole\(request, \["admin", "teacher"\]\)/);
+  assert.match(assessmentRoute, /requireApiRole\(request, \["admin", "teacher"\]\)/);
+  assert.match(submitRoute, /requireApiRole\(request, \["student"\]\)/);
+  assert.match(submitRoute, /assessment\.className !== user\.className/);
 });

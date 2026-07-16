@@ -1,10 +1,11 @@
 import { asc, eq } from "drizzle-orm";
 import { getDb } from "../../../../../db";
 import { assessments, attempts, questions } from "../../../../../db/schema";
-import { apiError, requireRequestUser } from "../../../../../lib/platform";
+import { apiError } from "../../../../../lib/platform";
+import { requireApiRole } from "../../../../../lib/portal-auth";
 
 export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
-  const user = requireRequestUser(request);
+  const user = await requireApiRole(request, ["student"]);
   if (user instanceof Response) return user;
 
   try {
@@ -17,11 +18,14 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
 
     const db = getDb();
     const [assessment] = await db
-      .select({ id: assessments.id, passMark: assessments.passMark })
+      .select({ id: assessments.id, passMark: assessments.passMark, className: assessments.className })
       .from(assessments)
       .where(eq(assessments.id, assessmentId))
       .limit(1);
     if (!assessment) return Response.json({ error: "Assessment not found." }, { status: 404 });
+    if (assessment.className !== user.className) {
+      return Response.json({ error: "This assessment is not assigned to your class." }, { status: 403 });
+    }
 
     const rows = await db
       .select({ id: questions.id, correctOption: questions.correctOption, points: questions.points })
@@ -42,7 +46,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
       .insert(attempts)
       .values({
         assessmentId,
-        studentEmail: user,
+        studentEmail: user.email,
         answersJson: JSON.stringify(payload.answers),
         score,
         totalPoints,

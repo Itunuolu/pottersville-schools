@@ -1,15 +1,19 @@
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { getDb } from "../../../db";
 import { lessonNotes } from "../../../db/schema";
-import { apiError, getPlatformEnv, requireRequestUser, safeFileName } from "../../../lib/platform";
+import { apiError, getPlatformEnv, safeFileName } from "../../../lib/platform";
+import { requireApiRole } from "../../../lib/portal-auth";
 
 const MAX_FILE_SIZE = 8 * 1024 * 1024;
 
 export async function GET(request: Request) {
-  const user = requireRequestUser(request);
+  const user = await requireApiRole(request, ["admin", "teacher", "student"]);
   if (user instanceof Response) return user;
 
   try {
+    const visibility = user.role === "student"
+      ? and(eq(lessonNotes.published, true), eq(lessonNotes.className, user.className || "__unassigned__"))
+      : eq(lessonNotes.published, true);
     const rows = await getDb()
       .select({
         id: lessonNotes.id,
@@ -22,7 +26,7 @@ export async function GET(request: Request) {
         createdAt: lessonNotes.createdAt,
       })
       .from(lessonNotes)
-      .where(eq(lessonNotes.published, true))
+      .where(visibility)
       .orderBy(desc(lessonNotes.createdAt), desc(lessonNotes.id));
 
     return Response.json({ notes: rows });
@@ -32,7 +36,7 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const user = requireRequestUser(request);
+  const user = await requireApiRole(request, ["admin", "teacher"]);
   if (user instanceof Response) return user;
 
   let uploadedKey: string | null = null;
@@ -62,7 +66,7 @@ export async function POST(request: Request) {
     uploadedKey = `lesson-notes/${crypto.randomUUID()}.pdf`;
     await LESSON_FILES.put(uploadedKey, await file.arrayBuffer(), {
       httpMetadata: { contentType: "application/pdf" },
-      customMetadata: { originalName: safeFileName(file.name), uploadedBy: user },
+      customMetadata: { originalName: safeFileName(file.name), uploadedBy: user.email },
     });
 
     const [note] = await getDb()
@@ -75,7 +79,7 @@ export async function POST(request: Request) {
         fileKey: uploadedKey,
         fileName: safeFileName(file.name),
         fileSize: file.size,
-        uploadedBy: user,
+        uploadedBy: user.email,
       })
       .returning({
         id: lessonNotes.id,

@@ -1,7 +1,8 @@
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { getDb } from "../../../db";
 import { assessments, questions } from "../../../db/schema";
-import { apiError, requireRequestUser } from "../../../lib/platform";
+import { apiError } from "../../../lib/platform";
+import { requireApiRole } from "../../../lib/portal-auth";
 
 type QuestionInput = {
   prompt?: string;
@@ -11,11 +12,14 @@ type QuestionInput = {
 };
 
 export async function GET(request: Request) {
-  const user = requireRequestUser(request);
+  const user = await requireApiRole(request, ["admin", "teacher", "student"]);
   if (user instanceof Response) return user;
 
   try {
     const db = getDb();
+    const visibility = user.role === "student"
+      ? and(eq(assessments.published, true), eq(assessments.className, user.className || "__unassigned__"))
+      : eq(assessments.published, true);
     const rows = await db
       .select({
         id: assessments.id,
@@ -29,7 +33,7 @@ export async function GET(request: Request) {
         createdAt: assessments.createdAt,
       })
       .from(assessments)
-      .where(eq(assessments.published, true))
+      .where(visibility)
       .orderBy(desc(assessments.createdAt), desc(assessments.id));
 
     const allQuestions = await db.select({ assessmentId: questions.assessmentId }).from(questions);
@@ -45,7 +49,7 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const user = requireRequestUser(request);
+  const user = await requireApiRole(request, ["admin", "teacher"]);
   if (user instanceof Response) return user;
 
   try {
@@ -102,7 +106,7 @@ export async function POST(request: Request) {
         className,
         durationMinutes,
         passMark,
-        createdBy: user,
+        createdBy: user.email,
       })
       .returning();
 

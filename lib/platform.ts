@@ -9,14 +9,6 @@ export function getPlatformEnv(): PlatformEnv {
   return env as unknown as PlatformEnv;
 }
 
-export function requireRequestUser(request: Request): string | Response {
-  const email = request.headers.get("oai-authenticated-user-email")?.trim().toLowerCase();
-  if (!email) {
-    return Response.json({ error: "Please sign in to continue." }, { status: 401 });
-  }
-  return email;
-}
-
 export function apiError(error: unknown) {
   const message = error instanceof Error ? error.message : "Unexpected error";
   const lower = message.toLowerCase();
