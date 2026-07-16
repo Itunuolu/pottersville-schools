@@ -92,3 +92,18 @@ test("role checks guard every content mutation", async () => {
   assert.match(submitRoute, /requireApiRole\(request, \["student"\]\)/);
   assert.match(submitRoute, /assessment\.className !== user\.className/);
 });
+
+test("owner recovery prevents an administrator activation dead end", async () => {
+  const [auth, migration] = await Promise.all([
+    readFile(new URL("lib/portal-auth.ts", root), "utf8"),
+    readFile(new URL("drizzle/0002_recover-owner-admin.sql", root), "utf8"),
+  ]);
+
+  assert.match(auth, /where\(eq\(portalUsers\.role, "admin"\)\)/);
+  assert.match(auth, /Recovery rule: a school must never be left without an administrator/);
+  assert.match(auth, /role: "admin"/);
+  assert.match(migration, /itunuoluwaakinkugbe@gmail\.com/);
+  assert.match(migration, /ON CONFLICT\(`email`\) DO UPDATE SET/);
+  assert.match(migration, /`role` = 'admin'/);
+  assert.match(migration, /`status` = 'active'/);
+});

@@ -40,29 +40,74 @@ export async function resolvePortalUser(options: { bootstrapFirstAdmin?: boolean
     .where(eq(portalUsers.email, email))
     .limit(1);
 
-  if (existing) return existing;
-  if (!options.bootstrapFirstAdmin) return null;
+  if (!options.bootstrapFirstAdmin) return existing ?? null;
 
-  const [{ value: userCount }] = await db.select({ value: count() }).from(portalUsers);
-  if (userCount > 0) return null;
+  const [{ value: adminCount }] = await db
+    .select({ value: count() })
+    .from(portalUsers)
+    .where(eq(portalUsers.role, "admin"));
 
-  const [admin] = await db
-    .insert(portalUsers)
-    .values({
-      email,
-      displayName: identity.fullName?.trim() || identity.displayName || email,
-      role: "admin",
-      createdBy: "system:first-admin",
-    })
-    .returning({
-      id: portalUsers.id,
-      email: portalUsers.email,
-      displayName: portalUsers.displayName,
-      role: portalUsers.role,
-      status: portalUsers.status,
-      className: portalUsers.className,
-    });
-  return admin;
+  if (adminCount > 0) return existing ?? null;
+
+  // Recovery rule: a school must never be left without an administrator.
+  // On an owner-private deployment, the first verified identity can claim the
+  // empty administrator seat even when orphaned non-admin rows already exist.
+  if (existing) {
+    const [recoveredAdmin] = await db
+      .update(portalUsers)
+      .set({
+        role: "admin",
+        status: "active",
+        className: null,
+        updatedAt: new Date().toISOString(),
+      })
+      .where(eq(portalUsers.id, existing.id))
+      .returning({
+        id: portalUsers.id,
+        email: portalUsers.email,
+        displayName: portalUsers.displayName,
+        role: portalUsers.role,
+        status: portalUsers.status,
+        className: portalUsers.className,
+      });
+    return recoveredAdmin;
+  }
+
+  try {
+    const [admin] = await db
+      .insert(portalUsers)
+      .values({
+        email,
+        displayName: identity.fullName?.trim() || identity.displayName || email,
+        role: "admin",
+        createdBy: "system:first-admin",
+      })
+      .returning({
+        id: portalUsers.id,
+        email: portalUsers.email,
+        displayName: portalUsers.displayName,
+        role: portalUsers.role,
+        status: portalUsers.status,
+        className: portalUsers.className,
+      });
+    return admin;
+  } catch {
+    // Concurrent first requests may race. Re-read the identity rather than
+    // sending the owner to an activation dead end.
+    const [recovered] = await db
+      .select({
+        id: portalUsers.id,
+        email: portalUsers.email,
+        displayName: portalUsers.displayName,
+        role: portalUsers.role,
+        status: portalUsers.status,
+        className: portalUsers.className,
+      })
+      .from(portalUsers)
+      .where(eq(portalUsers.email, email))
+      .limit(1);
+    return recovered ?? null;
+  }
 }
 
 export async function requirePortalRole(returnTo: string, allowedRoles: PortalRole[]): Promise<PortalUser> {
