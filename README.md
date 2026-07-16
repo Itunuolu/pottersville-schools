@@ -4,14 +4,20 @@ PurpleStars is a connected school operations platform for administrators, teache
 
 **Live investor demo:** [purplestars-school-demo.netlify.app](https://purplestars-school-demo.netlify.app/)
 
-## Investor showcase
+## Investor demonstration application
 
-The public investor showcase is served from `docs/` and deploys to both Netlify and GitHub Pages. It is a static, browser-safe demonstration of the product experience and includes:
+The public investor application is served from `docs/` and deploys to both Netlify and GitHub Pages. It is a browser-safe demonstration with fictional data and includes:
 
-- administrator, teacher, and student workspace previews;
-- lesson-note viewing and printing;
-- an interactive student quiz with immediate scoring;
-- sample attendance, result, timetable, and reporting data.
+- a branded sign-in page with administrator, teacher, and student demo accounts;
+- separate role-based dashboards and ten navigable portal pages;
+- interactive academic setup, attendance, lesson notes, assignments, assessments, results, announcements, support, and profile workflows;
+- browser-persistent demonstration records, immediate quiz scoring, and printable lesson notes and report cards.
+
+All demonstration accounts use the password `demo1234`:
+
+- Administrator: `admin@purplestars.demo`
+- Teacher: `teacher@purplestars.demo`
+- Student: `PSNT016`
 
 The production application in `app/` contains the complete server-backed workflows. GitHub Pages cannot execute its authentication, database, file-storage, or API routes, so the public showcase uses demonstration data only.
 

@@ -170,3 +170,35 @@ test("investor presentation flow and bulk onboarding are included", async () => 
   assert.match(importer, /school-accounts-template\.csv/);
   assert.match(userApi, /Import between 1 and 250 accounts/);
 });
+
+test("Netlify demo has login, role dashboards and complete school pages", async () => {
+  const [login, loginScript, portal, portalStyles, netlify] = await Promise.all([
+    readFile(new URL("docs/index.html", root), "utf8"),
+    readFile(new URL("docs/login.js", root), "utf8"),
+    readFile(new URL("docs/portal.js", root), "utf8"),
+    readFile(new URL("docs/portal.css", root), "utf8"),
+    readFile(new URL("netlify.toml", root), "utf8"),
+  ]);
+
+  assert.match(login, /Sign in to the demo portal/);
+  assert.match(login, /Administrator/);
+  assert.match(login, /Teacher/);
+  assert.match(login, /Student/);
+  assert.match(loginScript, /purplestars-demo-session/);
+  assert.match(portal, /Academic setup/);
+  assert.match(portal, /Mark student attendance/);
+  assert.match(portal, /Upload a lesson note/);
+  assert.match(portal, /Create an assignment/);
+  assert.match(portal, /Submit and score instantly/);
+  assert.match(portal, /Print report card/);
+  assert.match(portal, /Publish an announcement/);
+  assert.match(portal, /Submit a support ticket/);
+  assert.match(portalStyles, /\.portal-shell/);
+  assert.match(netlify, /publish = "docs"/);
+
+  for (const page of ["dashboard", "academics", "attendance", "lessons", "assignments", "assessments", "results", "communications", "support", "profile"]) {
+    const html = await readFile(new URL(`docs/${page}.html`, root), "utf8");
+    assert.match(html, new RegExp(`data-page="${page}"`));
+    assert.match(html, /portal\.js/);
+  }
+});

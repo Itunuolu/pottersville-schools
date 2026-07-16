@@ -3,174 +3,50 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="PurpleStars is a connected school operating system for administrators, teachers, and students.">
+  <meta name="description" content="Sign in to the PurpleStars School Portal investor demonstration.">
   <meta name="theme-color" content="#321a40">
-  <title>PurpleStars — Investor Product Showcase</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>Sign in — PurpleStars School Portal</title>
+  <link rel="stylesheet" href="portal.css">
 </head>
-<body>
-  <header class="site-nav">
-    <a class="brand" href="#top" aria-label="PurpleStars home">
-      <span class="brand-mark">✦</span>
-      <span>PurpleStars<small>School portal</small></span>
-    </a>
-    <nav aria-label="Showcase navigation">
-      <a href="#platform">Platform</a>
-      <a href="#workspaces">Workspaces</a>
-      <a href="#capabilities">Capabilities</a>
-    </nav>
-    <a class="nav-cta" href="#workspaces">Explore the demo <span>→</span></a>
-  </header>
+<body class="login-body">
+  <main class="login-page">
+    <section class="login-story">
+      <a class="brand login-brand" href="index.html"><span class="brand-mark">✦</span><span>PurpleStars<small>School portal</small></span></a>
+      <div class="login-story-copy">
+        <span class="eyebrow light">Investor demonstration environment</span>
+        <h1>One connected place for the entire school day.</h1>
+        <p>Experience the platform as an administrator, teacher, or student. Every account opens a purpose-built workspace using safe fictional school data.</p>
+      </div>
+      <div class="login-proof">
+        <article><b>01</b><span><strong>Run the school</strong><small>Academic setup, accounts, attendance, approvals, and reporting.</small></span></article>
+        <article><b>02</b><span><strong>Deliver learning</strong><small>Lesson notes, assignments, assessments, scoring, and feedback.</small></span></article>
+        <article><b>03</b><span><strong>See progress</strong><small>Student dashboards, instant quiz scores, and report cards.</small></span></article>
+      </div>
+      <p class="fiction-note">All people and records in this public demo are fictional.</p>
+    </section>
 
-  <main id="top">
-    <section class="hero">
-      <div class="hero-copy">
-        <span class="eyebrow light">Investor product showcase</span>
-        <h1>A calmer way to run the entire school day.</h1>
-        <p>PurpleStars connects administration, classroom delivery, assessment, and student progress in one secure and beautifully simple platform.</p>
-        <div class="hero-actions">
-          <a class="button primary" href="#workspaces">Enter product demo <span>→</span></a>
-          <a class="button ghost" href="#platform">See the platform story</a>
+    <section class="login-panel">
+      <div class="login-card">
+        <div class="login-heading"><span class="login-icon">✦</span><div><span class="eyebrow">Welcome to PurpleStars</span><h2>Sign in to the demo portal</h2><p>Select an account or enter its details below.</p></div></div>
+
+        <div class="demo-accounts" aria-label="Demo accounts">
+          <button type="button" data-demo-account="admin"><span class="account-avatar purple">IA</span><span><strong>Administrator</strong><small>Full school operations</small></span><em>Use account</em></button>
+          <button type="button" data-demo-account="teacher"><span class="account-avatar gold">AF</span><span><strong>Teacher</strong><small>Teaching and assessment</small></span><em>Use account</em></button>
+          <button type="button" data-demo-account="student"><span class="account-avatar green">AO</span><span><strong>Student</strong><small>Learning and results</small></span><em>Use account</em></button>
         </div>
-        <div class="trust-row">
-          <span><b>3</b> role workspaces</span>
-          <span><b>10+</b> connected workflows</span>
-          <span><b>1</b> source of truth</span>
-        </div>
+
+        <div class="or"><span>or enter demo credentials</span></div>
+        <form id="login-form" class="login-form">
+          <label>Username or email<input id="login-identity" name="identity" autocomplete="username" required placeholder="Enter demo username"></label>
+          <label>Password<span class="password-field"><input id="login-password" name="password" type="password" autocomplete="current-password" required placeholder="Enter demo password"><button id="toggle-password" type="button" aria-label="Show password">Show</button></span></label>
+          <div class="login-options"><label><input type="checkbox" checked> Keep this demo session active</label><button type="button" id="reset-demo">Reset demo data</button></div>
+          <p class="login-error" id="login-error" role="alert" aria-live="polite"></p>
+          <button class="login-submit" type="submit"><span>Sign in to dashboard</span><b>→</b></button>
+        </form>
+        <div class="login-footer"><span>Demo password for all accounts: <b>demo1234</b></span><a href="investor-tour.html">View product tour</a></div>
       </div>
-      <div class="hero-product" aria-label="PurpleStars product overview">
-        <div class="window-bar"><span><i></i><i></i><i></i></span><small>Live school overview</small></div>
-        <div class="mini-layout">
-          <aside><b>✦</b><i></i><i></i><i></i><i></i></aside>
-          <div class="mini-main">
-            <div class="mini-heading"><span><small>GOOD MORNING</small><strong>School overview</strong></span><em>IA</em></div>
-            <div class="mini-stats">
-              <span><small>Students</small><b>428</b><i>+12 this term</i></span>
-              <span><small>Attendance</small><b>94%</b><i>Today</i></span>
-              <span><small>Results</small><b>36</b><i>Awaiting approval</i></span>
-            </div>
-            <div class="mini-grid">
-              <div class="mini-chart"><small>Weekly attendance</small><div><i style="height:48%"></i><i style="height:66%"></i><i style="height:58%"></i><i style="height:79%"></i><i style="height:71%"></i><i style="height:90%"></i></div></div>
-              <div class="mini-list"><small>Today</small><span><b>08:15</b> Basic Science</span><span><b>10:30</b> Biology</span><span><b>13:20</b> Agriculture</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="proof" aria-label="PurpleStars audiences">
-      <span>Built for modern school communities</span>
-      <b>Administrators</b><b>Teachers</b><b>Students</b><b>Parents</b><b>Stakeholders</b>
-    </section>
-
-    <section class="story section" id="platform">
-      <div class="section-heading">
-        <span class="eyebrow">One connected operating system</span>
-        <h2>From school setup to measurable outcomes.</h2>
-        <p>Every workspace uses the same academic records, so information moves cleanly from administrators to teachers and students.</p>
-      </div>
-      <div class="story-flow">
-        <article><span>01</span><i>◎</i><h3>Set the foundation</h3><p>Configure sessions, terms, classes, subjects, timetables, and user roles once.</p></article>
-        <article><span>02</span><i>▤</i><h3>Deliver learning</h3><p>Publish lesson notes, assignments, announcements, quizzes, and examinations.</p></article>
-        <article><span>03</span><i>✓</i><h3>Measure progress</h3><p>Capture attendance, mark work automatically, and approve student results.</p></article>
-        <article><span>04</span><i>↗</i><h3>Improve decisions</h3><p>Give leaders clear operational reporting and families timely visibility.</p></article>
-      </div>
-    </section>
-
-    <section class="workspace-section" id="workspaces">
-      <div class="section-heading centered">
-        <span class="eyebrow">Interactive product preview</span>
-        <h2>See the school through every role.</h2>
-        <p>Switch workspaces below. All names and records are fictional demonstration data.</p>
-      </div>
-      <div class="demo-shell">
-        <aside class="demo-sidebar">
-          <a class="demo-brand" href="#workspaces"><span>✦</span><b>PurpleStars<small>Investor preview</small></b></a>
-          <div class="role-card"><small>Viewing as</small><strong id="current-role-label">Administrator</strong></div>
-          <nav aria-label="Demo sections">
-            <button class="active" data-section="overview"><span>⌂</span>Overview</button>
-            <button data-section="learning"><span>▤</span>Learning</button>
-            <button data-section="assessment"><span>✓</span>Assessments</button>
-            <button data-section="results"><span>↗</span>Results</button>
-          </nav>
-          <div class="demo-user"><span id="avatar">IA</span><div><b id="user-name">Itunu Akinkugbe</b><small id="user-email">Administrator</small></div></div>
-        </aside>
-        <div class="demo-content">
-          <header class="demo-topbar">
-            <div><small>ROLE WORKSPACE</small><h3 id="workspace-title">Administration overview</h3></div>
-            <div class="role-switcher" aria-label="Choose a role">
-              <button class="active" data-role="admin">Admin</button>
-              <button data-role="teacher">Teacher</button>
-              <button data-role="student">Student</button>
-            </div>
-          </header>
-
-          <div class="demo-panel active" data-panel="admin-overview">
-            <div class="welcome"><div><span class="eyebrow">Thursday, 16 July</span><h2>Good morning, Itunu.</h2><p>Here is what is happening across PurpleStars today.</p></div><button class="small-button">＋ Add school record</button></div>
-            <div class="stat-grid">
-              <article><span class="stat-icon lavender">♙</span><div><b>428</b><small>Active students</small><em>↑ 12 this term</em></div></article>
-              <article><span class="stat-icon green">✓</span><div><b>94%</b><small>Attendance today</small><em>↑ 2.4% this week</em></div></article>
-              <article><span class="stat-icon amber">▤</span><div><b>36</b><small>Results to approve</small><em>3 classes ready</em></div></article>
-              <article><span class="stat-icon blue">◎</span><div><b>18</b><small>Teachers online</small><em>4 lessons active</em></div></article>
-            </div>
-            <div class="content-grid">
-              <article class="card wide-card"><header><div><h4>Attendance trend</h4><p>Whole-school daily rate</p></div><span class="status success">Healthy</span></header><div class="chart"><div class="y-axis"><span>100%</span><span>75%</span><span>50%</span><span>25%</span></div><div class="bars"><span style="height:76%"><i>Mon</i></span><span style="height:84%"><i>Tue</i></span><span style="height:80%"><i>Wed</i></span><span class="today" style="height:94%"><i>Thu</i></span><span style="height:89%"><i>Fri</i></span></div></div></article>
-              <article class="card"><header><div><h4>Approval queue</h4><p>Ready for your review</p></div><b class="count">3</b></header><div class="queue"><span><i>B</i><div><b>Biology · SS 1B</b><small>28 results submitted</small></div><em>Review</em></span><span><i>M</i><div><b>Mathematics · JSS 3A</b><small>30 results submitted</small></div><em>Review</em></span><span><i>E</i><div><b>English · JSS 2A</b><small>32 results submitted</small></div><em>Review</em></span></div></article>
-            </div>
-          </div>
-
-          <div class="demo-panel" data-panel="teacher-overview">
-            <div class="welcome"><div><span class="eyebrow">Teacher workspace</span><h2>Good morning, Faith.</h2><p>Your lessons, learners, and next actions are ready.</p></div><button class="small-button">＋ Upload lesson note</button></div>
-            <div class="stat-grid"><article><span class="stat-icon lavender">♙</span><div><b>90</b><small>My students</small><em>3 assigned classes</em></div></article><article><span class="stat-icon green">✓</span><div><b>92%</b><small>Class attendance</small><em>Today</em></div></article><article><span class="stat-icon amber">▤</span><div><b>14</b><small>Submissions to grade</small><em>2 due today</em></div></article><article><span class="stat-icon blue">◎</span><div><b>3</b><small>Lessons today</small><em>Next at 10:30</em></div></article></div>
-            <div class="content-grid"><article class="card wide-card"><header><div><h4>Today’s teaching schedule</h4><p>Thursday, 16 July</p></div><span class="status success">On track</span></header><div class="schedule"><span><time>08:15</time><i></i><div><b>Basic Science</b><small>JSS 2A · Science Lab</small></div><em>Completed</em></span><span class="current"><time>10:30</time><i></i><div><b>Biology</b><small>SS 1B · Room 12</small></div><em>Next</em></span><span><time>13:20</time><i></i><div><b>Agricultural Science</b><small>JSS 3A · School Farm</small></div><em>Upcoming</em></span></div></article><article class="card"><header><div><h4>Quick actions</h4><p>Continue your school day</p></div></header><div class="quick-actions"><button data-jump="learning">▤<span><b>Publish lesson note</b><small>PDF resources for students</small></span></button><button data-jump="assessment">✓<span><b>Create an assessment</b><small>Quiz or examination</small></span></button><button data-jump="results">↗<span><b>Enter student scores</b><small>CA and examination marks</small></span></button></div></article></div>
-          </div>
-
-          <div class="demo-panel" data-panel="student-overview">
-            <div class="welcome"><div><span class="eyebrow">Student workspace · SS 1B</span><h2>Welcome back, Amara.</h2><p>Stay focused—your learning and progress are all in one place.</p></div><button class="small-button" data-jump="assessment">Take today’s quiz →</button></div>
-            <div class="stat-grid"><article><span class="stat-icon lavender">◎</span><div><b>94%</b><small>Attendance</small><em>This term</em></div></article><article><span class="stat-icon green">↗</span><div><b>78%</b><small>Current average</small><em>↑ 4% this month</em></div></article><article><span class="stat-icon amber">▤</span><div><b>2</b><small>Assignments due</small><em>Next due Friday</em></div></article><article><span class="stat-icon blue">✓</span><div><b>1</b><small>Quiz available</small><em>Biology · 10 min</em></div></article></div>
-            <div class="content-grid"><article class="card wide-card"><header><div><h4>My school day</h4><p>Your timetable at a glance</p></div><span class="status success">All caught up</span></header><div class="student-timeline"><span><time>08:15</time><div><b>Mathematics</b><small>Room 12 · Mr Adeyemi</small></div><em>Done</em></span><span class="current"><time>10:30</time><div><b>Biology</b><small>Science Lab · Mrs Faith</small></div><em>Now</em></span><span><time>12:10</time><div><b>English Language</b><small>Room 12 · Mrs James</small></div><em>Later</em></span></div></article><article class="card"><header><div><h4>Recent achievement</h4><p>Keep the momentum going</p></div></header><div class="achievement"><span>★</span><b>Great improvement!</b><p>Your Biology average increased by 8% this month.</p><em>Top 20% of your class</em></div></article></div>
-          </div>
-
-          <div class="demo-panel" data-section-panel="learning">
-            <div class="welcome"><div><span class="eyebrow">Connected learning</span><h2>Lesson resources, clearly organised.</h2><p>Teachers publish PDF notes by class, subject, term, week, and topic.</p></div><a class="small-button" href="lesson-note.html" target="_blank" rel="noopener">Open printable note →</a></div>
-            <div class="resource-grid"><article class="resource-card featured"><span class="file-icon">PDF</span><div><small>BIOLOGY · WEEK 4</small><h4>Cell Structure and Organisation</h4><p>Complete lesson note with learning objectives, diagrams, class activity, and revision questions.</p><div><span>Mrs Akinkugbe Faith</span><span>2.4 MB</span></div></div><a href="lesson-note.html" target="_blank" rel="noopener">View & print</a></article><article class="resource-card"><span class="file-icon gold">PDF</span><div><small>MATHEMATICS · WEEK 4</small><h4>Linear Equations</h4><p>Worked examples and independent practice.</p><div><span>Mr Adeyemi</span><span>1.8 MB</span></div></div><a href="lesson-note.html" target="_blank" rel="noopener">View & print</a></article><article class="resource-card"><span class="file-icon green-file">PDF</span><div><small>ENGLISH · WEEK 4</small><h4>Comprehension Skills</h4><p>Reading passage and guided questions.</p><div><span>Mrs James</span><span>1.2 MB</span></div></div><a href="lesson-note.html" target="_blank" rel="noopener">View & print</a></article></div>
-          </div>
-
-          <div class="demo-panel" data-section-panel="assessment">
-            <div class="welcome"><div><span class="eyebrow">Automatic assessment</span><h2>Try the student quiz experience.</h2><p>Submit all three questions to see immediate scoring and feedback.</p></div><span class="quiz-timer">● 10:00 remaining</span></div>
-            <form class="quiz-card" id="quiz-form">
-              <div class="quiz-progress"><span>Biology knowledge check</span><b>3 questions · 3 marks</b></div>
-              <fieldset><legend><span>01</span>Which structure controls the activities of a cell?</legend><label><input type="radio" name="q1" value="0">Cell wall</label><label><input type="radio" name="q1" value="1">Nucleus</label><label><input type="radio" name="q1" value="2">Vacuole</label><label><input type="radio" name="q1" value="3">Cytoplasm</label></fieldset>
-              <fieldset><legend><span>02</span>Which organelle is responsible for photosynthesis?</legend><label><input type="radio" name="q2" value="0">Chloroplast</label><label><input type="radio" name="q2" value="1">Ribosome</label><label><input type="radio" name="q2" value="2">Mitochondrion</label><label><input type="radio" name="q2" value="3">Nucleus</label></fieldset>
-              <fieldset><legend><span>03</span>The basic unit of life is the:</legend><label><input type="radio" name="q3" value="0">Tissue</label><label><input type="radio" name="q3" value="1">Organ</label><label><input type="radio" name="q3" value="2">Cell</label><label><input type="radio" name="q3" value="3">System</label></fieldset>
-              <div class="quiz-footer"><p id="quiz-message" aria-live="polite">Answer every question before submitting.</p><button type="submit" class="small-button">Submit and score instantly →</button></div>
-            </form>
-            <div class="score-card" id="score-card" hidden><span>★</span><div><small>YOUR SCORE IS READY</small><h3><b id="score-value">100%</b> Excellent work!</h3><p id="score-copy">You answered all questions correctly.</p></div><button type="button" id="retry-quiz">Try again</button></div>
-          </div>
-
-          <div class="demo-panel" data-section-panel="results">
-            <div class="welcome"><div><span class="eyebrow">Student progress</span><h2>Results that are clear and actionable.</h2><p>Teachers enter scores, administrators approve report cards, and students see outcomes immediately after publication.</p></div><button class="small-button" onclick="window.print()">Print report card</button></div>
-            <div class="report-summary"><div><span class="student-avatar">AO</span><div><small>STUDENT REPORT · FIRST TERM</small><h3>Amara Okafor</h3><p>SS 1B · 2026/2027 Academic Session</p></div></div><div><span><small>Average</small><b>78%</b></span><span><small>Position</small><b>6<sup>th</sup></b></span><span><small>Attendance</small><b>94%</b></span></div></div>
-            <div class="result-table"><div class="table-head"><span>Subject</span><span>CA / 40</span><span>Exam / 60</span><span>Total</span><span>Grade</span></div><div><span><b>Biology</b><small>Mrs Akinkugbe</small></span><span>34</span><span>52</span><span><b>86</b></span><span><em class="grade a">A</em></span></div><div><span><b>Mathematics</b><small>Mr Adeyemi</small></span><span>31</span><span>47</span><span><b>78</b></span><span><em class="grade b">B</em></span></div><div><span><b>English Language</b><small>Mrs James</small></span><span>29</span><span>44</span><span><b>73</b></span><span><em class="grade b">B</em></span></div><div><span><b>Agricultural Science</b><small>Mrs Akinkugbe</small></span><span>36</span><span>50</span><span><b>86</b></span><span><em class="grade a">A</em></span></div><div><span><b>Basic Science</b><small>Mrs Akinkugbe</small></span><span>30</span><span>39</span><span><b>69</b></span><span><em class="grade c">C</em></span></div></div>
-          </div>
-        </div>
-      </div>
-      <p class="demo-note"><span>●</span> This public showcase uses fictional sample data. The production portal adds secure accounts, persistent records, uploads, audit logs, and school-controlled permissions.</p>
-    </section>
-
-    <section class="capabilities section" id="capabilities">
-      <div class="section-heading"><span class="eyebrow">Complete working flows</span><h2>One platform. Every essential school workflow.</h2><p>PurpleStars reduces fragmented tools and repetitive administration while making the next action obvious for every user.</p></div>
-      <div class="capability-list"><article><i>♙</i><div><h3>Accounts & roles</h3><p>Controlled onboarding, bulk imports, profiles, ID cards, and audit history.</p></div></article><article><i>◎</i><div><h3>Academic operations</h3><p>Sessions, terms, classes, subjects, assignments, and timetables.</p></div></article><article><i>✓</i><div><h3>Attendance</h3><p>Daily registers, class history, summaries, and CSV exports.</p></div></article><article><i>▤</i><div><h3>Learning resources</h3><p>PDF lesson notes organised by subject, term, week, and topic.</p></div></article><article><i>★</i><div><h3>Assessment</h3><p>Question imports, scheduling, attempt controls, and instant scoring.</p></div></article><article><i>↗</i><div><h3>Results & reporting</h3><p>Grades, approvals, report cards, printing, and operational exports.</p></div></article></div>
-    </section>
-
-    <section class="final-cta">
-      <span class="brand-mark large">✦</span>
-      <div><span class="eyebrow">A connected school community</span><h2>Technology that lets educators focus on education.</h2><p>PurpleStars makes school operations calmer, clearer, and easier to navigate—from the front office to every classroom.</p></div>
-      <a class="button primary" href="#workspaces">Replay product demo <span>↑</span></a>
     </section>
   </main>
-
-  <footer><a class="brand" href="#top"><span class="brand-mark">✦</span><span>PurpleStars<small>School portal</small></span></a><p>Investor showcase · Fictional demonstration data only</p><span>© 2026 PurpleStars</span></footer>
-  <script src="app.js"></script>
+  <script src="login.js"></script>
 </body>
 </html>
