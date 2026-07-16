@@ -1,98 +1,55 @@
-# vinext-starter
+# PurpleStars School Portal
 
-A clean full-stack starter running on
-[vinext](https://github.com/cloudflare/vinext), with optional Cloudflare D1 and
-Drizzle support.
+PurpleStars is a connected school operations platform for administrators, teachers, and students. It brings academic setup, attendance, lesson resources, assignments, assessments, results, communication, and reporting into one role-aware workspace.
 
-## Prerequisites
+## Investor showcase
 
-- Node.js `>=22.13.0`
+The public GitHub Pages showcase is served from `docs/`. It is a static, browser-safe demonstration of the product experience and includes:
 
-## Quick Start
+- administrator, teacher, and student workspace previews;
+- lesson-note viewing and printing;
+- an interactive student quiz with immediate scoring;
+- sample attendance, result, timetable, and reporting data.
+
+The production application in `app/` contains the complete server-backed workflows. GitHub Pages cannot execute its authentication, database, file-storage, or API routes, so the public showcase uses demonstration data only.
+
+## Complete application capabilities
+
+- Role-based administrator, teacher, and student access
+- Academic sessions, terms, classes, subjects, teaching assignments, and timetables
+- Attendance capture and CSV reporting
+- PDF lesson-note upload, publishing, download tracking, and printing
+- Assignments, submissions, feedback, and grading
+- Quizzes and examinations with CSV/XLSX question import
+- Timed attempts, automatic marking, and immediate scores
+- Results, grades, report cards, approvals, exports, and print views
+- Announcements, events, profiles, ID cards, support tickets, and audit records
+
+## Local development
+
+Requirements: Node.js `>=22.13.0`.
 
 ```bash
 npm install
 npm run dev
+```
+
+For a production validation build:
+
+```bash
 npm run build
 ```
 
-This starter does not use `wrangler.jsonc`.
+The full application uses Cloudflare-compatible D1 and R2 bindings declared in `.openai/hosting.json`. Generated database migrations live in `drizzle/`.
 
-## Included Shape
+## Project structure
 
-- edit site code under `app/`
-- `.openai/hosting.json` declares optional Sites D1 and R2 bindings
-- `vite.config.ts` simulates declared bindings for local development
-- `db/schema.ts` starts intentionally empty
-- `examples/d1/` contains an optional D1 example surface
-- `drizzle.config.ts` supports local migration generation when needed
+- `app/` — application routes, dashboards, and APIs
+- `db/` — Drizzle schema
+- `drizzle/` — database migrations
+- `docs/` — public GitHub Pages investor showcase
+- `tests/` — production feature checks
 
-## Workspace Auth Headers
+## Security note
 
-OpenAI workspace sites can read the current user's email from
-`oai-authenticated-user-email`.
-
-SIWC-authenticated workspace sites may also receive
-`oai-authenticated-user-full-name` when the user's SIWC profile has a non-empty
-`name` claim. The full-name value is percent-encoded UTF-8 and is accompanied by
-`oai-authenticated-user-full-name-encoding: percent-encoded-utf-8`.
-
-Treat the full name as optional and fall back to email when it is absent:
-
-```tsx
-import { headers } from "next/headers";
-
-export default async function Home() {
-  const requestHeaders = await headers();
-  const email = requestHeaders.get("oai-authenticated-user-email");
-  const encodedFullName = requestHeaders.get("oai-authenticated-user-full-name");
-  const fullName =
-    encodedFullName &&
-    requestHeaders.get("oai-authenticated-user-full-name-encoding") ===
-      "percent-encoded-utf-8"
-      ? decodeURIComponent(encodedFullName)
-      : null;
-
-  const displayName = fullName ?? email;
-  // ...
-}
-```
-
-## Optional Dispatch-Owned ChatGPT Sign-In
-
-Import the ready-to-use helpers from `app/chatgpt-auth.ts` when the site needs
-optional or required ChatGPT sign-in:
-
-- Use `getChatGPTUser()` for optional signed-in UI.
-- Use `requireChatGPTUser(returnTo)` for server-rendered pages that should send
-  anonymous visitors through Sign in with ChatGPT.
-- Use `chatGPTSignInPath(returnTo)` and `chatGPTSignOutPath(returnTo)` for
-  browser links or actions.
-- Pass a same-origin relative `returnTo` path for the destination after sign-in
-  or sign-out. The helper validates and safely encodes it.
-- Mark protected pages with `export const dynamic = "force-dynamic"` because
-  they depend on per-request identity headers.
-
-Dispatch owns `/signin-with-chatgpt`, `/signout-with-chatgpt`, `/callback`, the
-OAuth cookies, and identity header injection. Do not implement app routes for
-those reserved paths. Routes that do not import and call the helper remain
-anonymous-compatible.
-
-SIWC establishes identity only; it does not prove workspace membership. Use the
-Sites hosting platform's access policy controls for workspace-wide restrictions,
-or enforce explicit server-side membership or allowlist checks.
-
-Use SIWC for account pages, user-specific dashboards, saved records, and write
-actions tied to the current ChatGPT user. Leave public content anonymous.
-
-## Useful Commands
-
-- `npm run dev`: start local development
-- `npm run build`: verify the vinext build output
-- `npm test`: build the starter and verify its rendered loading skeleton
-- `npm run db:generate`: generate Drizzle migrations after schema changes
-
-## Learn More
-
-- [vinext Documentation](https://github.com/cloudflare/vinext)
-- [Drizzle D1 Guide](https://orm.drizzle.team/docs/get-started/d1-new)
+All records shown in the public investor showcase are fictional demonstration data. Do not commit real student records, credentials, environment files, or uploaded school documents to the repository.
