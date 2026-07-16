@@ -11,23 +11,23 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     metadataBase: baseUrl,
-    title: "Teacher Dashboard | PurpleStars School",
-    description: "A calm, modern teacher workspace for classes, attendance, results and school updates.",
+    title: "PurpleStars School | Every Child Thrives",
+    description: "A caring school community in Lagos nurturing global stars of character, competence and purpose, from Crèche to College.",
     icons: {
       icon: "/favicon.svg",
       shortcut: "/favicon.svg",
     },
     openGraph: {
-      title: "PurpleStars Teacher Dashboard",
-      description: "Everything you need for a smooth school day, all in one place.",
+      title: "PurpleStars School | Every Child Thrives",
+      description: "Where every child is known, valued and inspired to shine.",
       type: "website",
       url: baseUrl,
-      images: [{ url: socialImage, width: 1731, height: 909, alt: "PurpleStars — A calmer, clearer school day." }],
+      images: [{ url: socialImage, width: 1731, height: 909, alt: "PurpleStars School — where every child learns to shine." }],
     },
     twitter: {
       card: "summary_large_image",
-      title: "PurpleStars Teacher Dashboard",
-      description: "A calmer, clearer school day for teachers.",
+      title: "PurpleStars School | Every Child Thrives",
+      description: "Where every child is known, valued and inspired to shine.",
       images: [socialImage],
     },
   };

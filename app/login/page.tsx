@@ -10,7 +10,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
   if (identity) await redirectToPortalHome();
 
   const query = await searchParams;
-  const candidate = query.return_to || "/";
+  const candidate = query.return_to || "/login";
   const returnTo = candidate.startsWith("/") && !candidate.startsWith("//") ? candidate : "/";
   const signInHref = `/signin-with-chatgpt?return_to=${encodeURIComponent(returnTo)}`;
 
