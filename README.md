@@ -2,6 +2,8 @@
 
 PurpleStars is a connected school operations platform for administrators, teachers, and students. It brings academic setup, attendance, lesson resources, assignments, assessments, results, communication, and reporting into one role-aware workspace.
 
+**Live investor demo:** [purplestars-school-demo.netlify.app](https://purplestars-school-demo.netlify.app/)
+
 ## Investor showcase
 
 The public investor showcase is served from `docs/` and deploys to both Netlify and GitHub Pages. It is a static, browser-safe demonstration of the product experience and includes:
