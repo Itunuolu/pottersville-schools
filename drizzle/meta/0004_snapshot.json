@@ -1140,7 +1140,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "'PURPLESTARS'"
+          "default": "'POTTERSVILLE'"
         },
         "created_by": {
           "name": "created_by",

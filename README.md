@@ -1,12 +1,12 @@
-# PurpleStars School Portal
+# Pottersville School Portal
 
-PurpleStars is a connected school operations platform for administrators, teachers, and students. It brings academic setup, attendance, lesson resources, assignments, assessments, results, communication, and reporting into one role-aware workspace.
+Pottersville is a connected school operations platform for administrators, teachers, and students. It brings academic setup, attendance, lesson resources, assignments, assessments, results, communication, and reporting into one role-aware workspace.
 
-**Live investor demo:** [purplestars-school-demo.netlify.app](https://purplestars-school-demo.netlify.app/)
+**Live investor demo:** [pottersville-school-demo.netlify.app](https://pottersville-school-demo.netlify.app/)
 
 ## Investor demonstration application
 
-The public investor application is served from `docs/` and deploys to both Netlify and GitHub Pages. It is a browser-safe demonstration with fictional data and includes:
+The public investor application is served from `docs/` and deploys to both Netlify and GitHub Pages. Its root page opens directly to the portal sign-in, matching the investor demo flow, while the admissions website is preserved at `docs/school.html`. It is a browser-safe demonstration with fictional data and includes:
 
 - a branded sign-in page with administrator, teacher, and student demo accounts;
 - separate role-based dashboards and ten navigable portal pages;
@@ -15,9 +15,9 @@ The public investor application is served from `docs/` and deploys to both Netli
 
 All demonstration accounts use the password `demo1234`:
 
-- Administrator: `admin@purplestars.demo`
-- Teacher: `teacher@purplestars.demo`
-- Student: `PSNT016`
+- Administrator: `admin@pottersville.demo`
+- Teacher: `teacher@pottersville.demo`
+- Student: `PVNT016`
 
 The production application in `app/` contains the complete server-backed workflows. GitHub Pages cannot execute its authentication, database, file-storage, or API routes, so the public showcase uses demonstration data only.
 

@@ -15,7 +15,7 @@ CREATE TABLE `portal_users` (
 	`role` text NOT NULL,
 	`status` text DEFAULT 'active' NOT NULL,
 	`class_name` text,
-	`school_id` text DEFAULT 'PURPLESTARS' NOT NULL,
+	`school_id` text DEFAULT 'POTTERSVILLE' NOT NULL,
 	`created_by` text NOT NULL,
 	`created_at` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	`updated_at` text DEFAULT CURRENT_TIMESTAMP NOT NULL

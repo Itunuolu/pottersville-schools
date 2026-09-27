@@ -38,7 +38,7 @@ type TeacherDashboardProps = {
   };
 };
 
-const portal = "https://purplestarsportalsec.pythonanywhere.com";
+const portal = "https://pottersvilleportalsec.pythonanywhere.com";
 
 type PortalItem = {
   label: string;
@@ -136,7 +136,7 @@ export default function TeacherDashboard({ user }: TeacherDashboardProps) {
   const [liveStats, setLiveStats] = useState<any>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const firstName = user.displayName.split(/\s+/)[0] || "Teacher";
-  const initials = user.displayName.split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]?.toUpperCase()).join("") || "PS";
+  const initials = user.displayName.split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]?.toUpperCase()).join("") || "PV";
 
   const searchableItems = useMemo(
     () => navigation.flatMap((group) => group.items).filter((item) => item.href !== "#dashboard-main"),
@@ -201,8 +201,8 @@ export default function TeacherDashboard({ user }: TeacherDashboardProps) {
       <aside className={`sidebar${sidebarOpen ? " is-open" : ""}`} aria-label="Primary navigation">
         <div className="brand-row">
           <a className="brand" href="#dashboard-main" onClick={closeMobileNavigation}>
-            <span className="brand-mark" aria-hidden="true"><Sparkles size={19} strokeWidth={2.4} /></span>
-            <span className="brand-copy">PurpleStars<small>School portal</small></span>
+            <span className="brand-mark" aria-hidden="true"><img src="/images/pottersville-logo.png" alt="" /></span>
+            <span className="brand-copy">Pottersville<small>School portal</small></span>
           </a>
           <button className="mobile-close" type="button" aria-label="Close menu" onClick={closeMobileNavigation}>
             <X size={19} />

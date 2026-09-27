@@ -11,22 +11,22 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     metadataBase: baseUrl,
-    title: "PurpleStars School | Every Child Thrives",
+    title: "Pottersville School | Every Child Thrives",
     description: "A caring school community in Lagos nurturing global stars of character, competence and purpose, from Crèche to College.",
     icons: {
-      icon: "/favicon.svg",
-      shortcut: "/favicon.svg",
+      icon: "/images/pottersville-logo.png",
+      shortcut: "/images/pottersville-logo.png",
     },
     openGraph: {
-      title: "PurpleStars School | Every Child Thrives",
+      title: "Pottersville School | Every Child Thrives",
       description: "Where every child is known, valued and inspired to shine.",
       type: "website",
       url: baseUrl,
-      images: [{ url: socialImage, width: 1731, height: 909, alt: "PurpleStars School — where every child learns to shine." }],
+      images: [{ url: socialImage, width: 1731, height: 909, alt: "Pottersville School — where every child learns to shine." }],
     },
     twitter: {
       card: "summary_large_image",
-      title: "PurpleStars School | Every Child Thrives",
+      title: "Pottersville School | Every Child Thrives",
       description: "Where every child is known, valued and inspired to shine.",
       images: [socialImage],
     },

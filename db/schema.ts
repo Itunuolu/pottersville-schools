@@ -10,7 +10,7 @@ export const portalUsers = sqliteTable(
     role: text("role", { enum: ["admin", "teacher", "student"] }).notNull(),
     status: text("status", { enum: ["active", "suspended"] }).notNull().default("active"),
     className: text("class_name"),
-    schoolId: text("school_id").notNull().default("PURPLESTARS"),
+    schoolId: text("school_id").notNull().default("POTTERSVILLE"),
     createdBy: text("created_by").notNull(),
     createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
     updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),

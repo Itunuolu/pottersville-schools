@@ -153,9 +153,9 @@ async function seedDemo(adminEmail: string) {
     subjectRows.push(row);
   }
 
-  const teacherEmail = "faith.teacher@purplestars.demo";
+  const teacherEmail = "faith.teacher@pottersville.demo";
   const demoStudents = Array.from({ length: 12 }, (_, index) => ({
-    email: `student${index + 1}@purplestars.demo`,
+    email: `student${index + 1}@pottersville.demo`,
     displayName: ["Amara Okafor", "David Bello", "Chiamaka Eze", "Tobi Williams", "Zainab Musa", "Favour James", "Daniel Adeyemi", "Ada Nwosu", "Micheal Peters", "Grace Johnson", "Samuel Udo", "Aisha Lawal"][index],
     role: "student" as const,
     className: "SS 1B",
@@ -188,8 +188,8 @@ async function seedDemo(adminEmail: string) {
   }
 
   const existingAnnouncements = await db.select().from(announcements);
-  if (!existingAnnouncements.some((item) => item.title === "Welcome to the new PurpleStars portal")) {
-    await db.insert(announcements).values({ title: "Welcome to the new PurpleStars portal", body: "Explore the connected learning, attendance and assessment tools prepared for our school community.", audience: "all", priority: "important", publishedBy: adminEmail });
+  if (!existingAnnouncements.some((item) => item.title === "Welcome to the new Pottersville portal")) {
+    await db.insert(announcements).values({ title: "Welcome to the new Pottersville portal", body: "Explore the connected learning, attendance and assessment tools prepared for our school community.", audience: "all", priority: "important", publishedBy: adminEmail });
     created.announcements += 1;
   }
   const existingEvents = await db.select().from(schoolEvents);

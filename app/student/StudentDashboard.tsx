@@ -167,13 +167,13 @@ export default function StudentDashboard({ user }: StudentDashboardProps) {
 
   const currentQuestion = assessment?.questions[questionIndex];
   const answeredCount = useMemo(() => Object.keys(answers).length, [answers]);
-  const initials = user.displayName.split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]?.toUpperCase()).join("") || "PS";
+  const initials = user.displayName.split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]?.toUpperCase()).join("") || "PV";
   const canTakeAssessments = user.role === "student";
 
   return (
     <div className="student-app">
       <header className="student-topbar">
-        <a className="student-brand" href="/"><span><Sparkles size={18} /></span><strong>PurpleStars<small>Student learning portal</small></strong></a>
+        <a className="student-brand" href="/"><span><img src="/images/pottersville-logo.png" alt="" /></span><strong>Pottersville<small>Student learning portal</small></strong></a>
         <div className="student-account"><a className="student-avatar-link" href="/profile">{initials}</a><div><strong>{user.displayName}</strong><small>{user.role === "student" ? `${user.className || "Class pending"} · Student` : `${user.role} preview`}</small></div><a href="/signout-with-chatgpt?return_to=%2Flogin">Sign out</a></div>
       </header>
 

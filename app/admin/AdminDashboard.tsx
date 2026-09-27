@@ -1,6 +1,6 @@
 "use client";
 
-import { Activity, BookOpen, CheckCircle2, ChevronRight, GraduationCap, LayoutDashboard, LoaderCircle, LogOut, Plus, Search, ShieldCheck, Sparkles, UserCog, Users, X } from "lucide-react";
+import { Activity, BookOpen, CheckCircle2, ChevronRight, GraduationCap, LayoutDashboard, LoaderCircle, LogOut, Plus, Search, ShieldCheck, UserCog, Users, X } from "lucide-react";
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { BulkAccountImporter } from "./BulkAccountImporter";
 
@@ -85,7 +85,7 @@ export default function AdminDashboard({ currentUser }: { currentUser: { display
   return (
     <div className="admin-shell">
       <aside className="admin-sidebar">
-        <a className="brand admin-brand" href="/admin"><span className="brand-mark"><Sparkles size={19} /></span><span className="brand-copy">PurpleStars<small>Admin portal</small></span></a>
+        <a className="brand admin-brand" href="/admin"><span className="brand-mark"><img src="/images/pottersville-logo.png" alt="" /></span><span className="brand-copy">Pottersville<small>Admin portal</small></span></a>
         <nav><a className="active" href="/admin"><LayoutDashboard size={17} />Overview</a><a href="#accounts"><Users size={17} />User accounts</a><a href="/operations"><Activity size={17} />School operations</a><a href="/teacher"><BookOpen size={17} />Teacher workspace</a><a href="/student"><GraduationCap size={17} />Student preview</a></nav>
         <div className="admin-user"><span>{initials}</span><div><strong>{currentUser.displayName}</strong><small>Administrator</small></div><a href="/signout-with-chatgpt?return_to=%2Flogin" aria-label="Sign out"><LogOut size={16} /></a></div>
       </aside>

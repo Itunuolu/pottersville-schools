@@ -172,19 +172,36 @@ test("investor presentation flow and bulk onboarding are included", async () => 
 });
 
 test("Netlify demo has login, role dashboards and complete school pages", async () => {
-  const [login, loginScript, portal, portalStyles, netlify] = await Promise.all([
+  const [home, school, login, loginScript, portal, portalStyles, netlify] = await Promise.all([
     readFile(new URL("docs/index.html", root), "utf8"),
+    readFile(new URL("docs/school.html", root), "utf8"),
+    readFile(new URL("docs/portal-login.html", root), "utf8"),
     readFile(new URL("docs/login.js", root), "utf8"),
     readFile(new URL("docs/portal.js", root), "utf8"),
     readFile(new URL("docs/portal.css", root), "utf8"),
     readFile(new URL("netlify.toml", root), "utf8"),
   ]);
 
+  assert.match(home, /Sign in to the demo portal/);
+  assert.match(home, /Administrator/);
+  assert.match(home, /Teacher/);
+  assert.match(home, /Student/);
+  assert.match(home, /school\.html/);
+  assert.match(school, /Pottersville Schools/);
+  assert.match(school, /Admissions are open/);
+  assert.match(school, /pottersville-campus-reel\.mp4/);
+  assert.match(school, /pottersville-website-demo\.mp4/);
+  assert.match(school, /pottersville-student-leaders-ai\.png/);
+  assert.match(school, /pottersville-senior-uniform-ai\.png/);
+  assert.match(school, /pottersville-proprietor\.jpg/);
+  assert.doesNotMatch(school, /children-together|career-day|birthday-celebration|sports-day|parents-community|educators-team|young-speaker/);
+  assert.match(school, /index\.html/);
   assert.match(login, /Sign in to the demo portal/);
   assert.match(login, /Administrator/);
   assert.match(login, /Teacher/);
   assert.match(login, /Student/);
-  assert.match(loginScript, /purplestars-demo-session/);
+  assert.match(loginScript, /pottersville-demo-session/);
+  assert.match(portal, /index\.html/);
   assert.match(portal, /Academic setup/);
   assert.match(portal, /Mark student attendance/);
   assert.match(portal, /Upload a lesson note/);
@@ -195,6 +212,14 @@ test("Netlify demo has login, role dashboards and complete school pages", async 
   assert.match(portal, /Submit a support ticket/);
   assert.match(portalStyles, /\.portal-shell/);
   assert.match(netlify, /publish = "docs"/);
+  await access(new URL("docs/media/pottersville-campus-reel.mp4", root));
+  await access(new URL("docs/media/pottersville-website-demo.mp4", root));
+  await access(new URL("docs/images/pottersville-skills-ai.png", root));
+  await access(new URL("docs/images/pottersville-senior-uniform-ai.png", root));
+  await access(new URL("docs/images/pottersville-stage-ai.png", root));
+  await access(new URL("docs/images/pottersville-choir-ai.png", root));
+  await access(new URL("docs/images/pottersville-student-leaders-ai.png", root));
+  await access(new URL("docs/images/pottersville-proprietor.jpg", root));
 
   for (const page of ["dashboard", "academics", "attendance", "lessons", "assignments", "assessments", "results", "communications", "support", "profile"]) {
     const html = await readFile(new URL(`docs/${page}.html`, root), "utf8");

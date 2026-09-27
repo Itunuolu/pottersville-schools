@@ -1,7 +1,7 @@
-const session = readJSON(sessionStorage.getItem("purplestars-demo-session"));
+const session = readJSON(sessionStorage.getItem("pottersville-demo-session"));
 if (!session || !["admin", "teacher", "student"].includes(session.role)) {
   window.location.replace("index.html");
-  throw new Error("A valid PurpleStars demo session is required.");
+  throw new Error("A valid Pottersville demo session is required.");
 }
 
 const PAGE_META = {
@@ -39,9 +39,9 @@ const DEFAULT_DATA = {
   ],
   subjects: ["Basic Science", "Biology", "Agricultural Science", "Mathematics", "English Language"],
   students: [
-    ["Amara Okafor", "PSNT016"], ["David Bello", "PSNT017"], ["Chiamaka Eze", "PSNT018"], ["Tobi Williams", "PSNT019"], ["Zainab Musa", "PSNT020"], ["Favour James", "PSNT021"], ["Daniel Adeyemi", "PSNT022"], ["Ada Nwosu", "PSNT023"]
+    ["Amara Okafor", "PVNT016"], ["David Bello", "PVNT017"], ["Chiamaka Eze", "PVNT018"], ["Tobi Williams", "PVNT019"], ["Zainab Musa", "PVNT020"], ["Favour James", "PVNT021"], ["Daniel Adeyemi", "PVNT022"], ["Ada Nwosu", "PVNT023"]
   ],
-  attendance: { PSNT016: "present", PSNT017: "present", PSNT018: "late", PSNT019: "present", PSNT020: "absent", PSNT021: "present", PSNT022: "present", PSNT023: "present" },
+  attendance: { PVNT016: "present", PVNT017: "present", PVNT018: "late", PVNT019: "present", PVNT020: "absent", PVNT021: "present", PVNT022: "present", PVNT023: "present" },
   attendanceSavedAt: "2026-07-16T08:35:00.000Z",
   lessons: [
     { id: 1, subject: "Biology", className: "SS 1B", week: 4, title: "Cell Structure and Organisation", teacher: "Akinkugbe Faith", file: "biology-cell-structure.pdf", published: true },
@@ -64,7 +64,7 @@ const DEFAULT_DATA = {
     { subject: "Basic Science", teacher: "Akinkugbe Faith", ca: 30, exam: 39 }
   ],
   announcements: [
-    { id: 1, title: "Welcome to the PurpleStars portal", body: "Explore the connected learning, attendance, and assessment tools prepared for our school community.", audience: "Everyone", author: "Administration", date: "16 Jul" },
+    { id: 1, title: "Welcome to the Pottersville portal", body: "Explore the connected learning, attendance, and assessment tools prepared for our school community.", audience: "Everyone", author: "Administration", date: "16 Jul" },
     { id: 2, title: "Biology quiz opens today", body: "SS 1B students should complete the Week 4 knowledge check before Friday.", audience: "SS 1B", author: "Akinkugbe Faith", date: "16 Jul" },
     { id: 3, title: "Inter-house Sports Day", body: "Sports Day takes place on Friday 24 July at the main field.", audience: "Everyone", author: "Administration", date: "15 Jul" }
   ],
@@ -78,8 +78,8 @@ if (!allowed.includes(session.role)) window.location.replace("dashboard.html");
 
 function readJSON(value) { try { return JSON.parse(value); } catch { return null; } }
 function clone(value) { return JSON.parse(JSON.stringify(value)); }
-function loadData() { return readJSON(localStorage.getItem("purplestars-demo-data")) || clone(DEFAULT_DATA); }
-function saveData() { localStorage.setItem("purplestars-demo-data", JSON.stringify(data)); }
+function loadData() { return readJSON(localStorage.getItem("pottersville-demo-data")) || clone(DEFAULT_DATA); }
+function saveData() { localStorage.setItem("pottersville-demo-data", JSON.stringify(data)); }
 function esc(value) { return String(value ?? "").replace(/[&<>'"]/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" })[char]); }
 function initials(name) { return name.split(/\s+/).filter(Boolean).slice(0, 2).map(part => part[0]).join("").toUpperCase(); }
 function roleName(role) { return role === "admin" ? "Administrator" : role === "teacher" ? "Teacher" : "Student"; }
@@ -90,7 +90,7 @@ function today() { return "Thursday, 16 July 2026"; }
 document.getElementById("portal-app").innerHTML = `
   <div class="portal-shell">
     <aside class="sidebar" id="sidebar">
-      <a class="brand" href="dashboard.html"><span class="brand-mark">✦</span><span>PurpleStars<small>School portal demo</small></span></a>
+      <a class="brand" href="dashboard.html"><span class="brand-mark">✦</span><span>Pottersville<small>School portal demo</small></span></a>
       <div class="role-badge"><small>Signed in as</small><strong>${roleName(session.role)} workspace</strong></div>
       <nav class="portal-nav">${NAV.filter(item => item[3].includes(session.role)).map(item => `<a class="${page === item[0] ? "active" : ""}" href="${pageFile(item[0])}"><i>${item[1]}</i><span>${item[2]}</span></a>`).join("")}</nav>
       <div class="sidebar-account"><span class="sidebar-avatar">${initials(session.name)}</span><div><strong>${esc(session.name)}</strong><small>${esc(session.email)}</small></div><button id="logout" title="Sign out" aria-label="Sign out">↪</button></div>
@@ -129,7 +129,7 @@ function stats(items) {
 }
 
 function renderDashboard() {
-  if (session.role === "admin") return `${intro("School overview", "Good morning, Itunu.", "Here is what is happening across PurpleStars today.", `<a class="button primary" href="academics.html">＋ Add school record</a>`)}
+  if (session.role === "admin") return `${intro("School overview", "Good morning, Itunu.", "Here is what is happening across Pottersville today.", `<a class="button primary" href="academics.html">＋ Add school record</a>`)}
     ${stats([["♙",428,"Active students","↑ 12 this term"],["✓","94%","Attendance today","↑ 2.4% this week"],["▤",36,"Results to approve","3 classes ready"],["◎",18,"Teachers online","4 lessons active"]])}
     <section class="grid-2"><article class="card"><div class="card-head"><div><h3>Weekly attendance</h3><p>Whole-school daily rate</p></div><span class="pill green">Healthy</span></div><div class="activity-bars"><span style="height:72%"><small>Mon</small></span><span style="height:81%"><small>Tue</small></span><span style="height:77%"><small>Wed</small></span><span class="highlight" style="height:94%"><small>Thu</small></span><span style="height:87%"><small>Fri</small></span></div></article><article class="card"><div class="card-head"><div><h3>Approval queue</h3><p>Ready for administrator review</p></div><span class="pill amber">3 classes</span></div><div class="simple-list"><article><span class="list-symbol">B</span><div><b>Biology · SS 1B</b><small>28 results submitted</small></div><em>Review</em></article><article><span class="list-symbol">M</span><div><b>Mathematics · JSS 3A</b><small>30 results submitted</small></div><em>Review</em></article><article><span class="list-symbol">E</span><div><b>English · JSS 2A</b><small>32 results submitted</small></div><em>Review</em></article></div></article></section>`;
   if (session.role === "teacher") return `${intro("Teaching workspace", "Good morning, Faith.", "Your lessons, learners, and next actions are ready.", `<a class="button primary" href="lessons.html">＋ Upload lesson note</a>`)}
@@ -201,13 +201,13 @@ function renderSupport() {
 }
 
 function renderProfile() {
-  return `${intro("Verified demonstration account", "My school profile.", "Account information used across this role workspace.")}<section class="card profile-card"><div class="profile-hero"></div><div class="profile-body"><span class="profile-avatar">${initials(session.name)}</span><div class="profile-name"><span class="eyebrow">${roleName(session.role)} account</span><h2>${esc(session.name)}</h2><p>Active demonstration access · Signed in for this browser session</p></div><div class="profile-details"><article><small>Approved email</small><b>${esc(session.email)}</b></article><article><small>School</small><b>PurpleStars School, New Oko Oba</b></article><article><small>Class or workspace</small><b>${esc(session.className)}</b></article><article><small>Account status</small><b>Active · Demo environment</b></article><article><small>Academic session</small><b>${data.session.name}</b></article><article><small>Current term</small><b>${data.session.term}</b></article></div><div class="form-actions"><a class="button" href="investor-tour.html">View investor tour</a><button class="button danger" id="profile-logout">Sign out</button></div></div></section>`;
+  return `${intro("Verified demonstration account", "My school profile.", "Account information used across this role workspace.")}<section class="card profile-card"><div class="profile-hero"></div><div class="profile-body"><span class="profile-avatar">${initials(session.name)}</span><div class="profile-name"><span class="eyebrow">${roleName(session.role)} account</span><h2>${esc(session.name)}</h2><p>Active demonstration access · Signed in for this browser session</p></div><div class="profile-details"><article><small>Approved email</small><b>${esc(session.email)}</b></article><article><small>School</small><b>Pottersville School, New Oko Oba</b></article><article><small>Class or workspace</small><b>${esc(session.className)}</b></article><article><small>Account status</small><b>Active · Demo environment</b></article><article><small>Academic session</small><b>${data.session.name}</b></article><article><small>Current term</small><b>${data.session.term}</b></article></div><div class="form-actions"><a class="button" href="investor-tour.html">View investor tour</a><button class="button danger" id="profile-logout">Sign out</button></div></div></section>`;
 }
 
 function bindGlobal() {
-  const logout=()=>{sessionStorage.removeItem("purplestars-demo-session");window.location.assign("index.html")};
+  const logout=()=>{sessionStorage.removeItem("pottersville-demo-session");window.location.assign("index.html")};
   document.getElementById("logout").addEventListener("click",logout);
-  document.getElementById("reset-data").addEventListener("click",()=>{localStorage.removeItem("purplestars-demo-data");data=clone(DEFAULT_DATA);toast("Demo data restored to its original state.");window.setTimeout(()=>window.location.reload(),600)});
+  document.getElementById("reset-data").addEventListener("click",()=>{localStorage.removeItem("pottersville-demo-data");data=clone(DEFAULT_DATA);toast("Demo data restored to its original state.");window.setTimeout(()=>window.location.reload(),600)});
   const sidebar=document.getElementById("sidebar"),backdrop=document.getElementById("mobile-backdrop");
   document.getElementById("mobile-menu").addEventListener("click",()=>{sidebar.classList.add("open");backdrop.classList.add("show")});
   backdrop.addEventListener("click",()=>{sidebar.classList.remove("open");backdrop.classList.remove("show")});

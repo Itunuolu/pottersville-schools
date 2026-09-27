@@ -1,339 +1,322 @@
 import {
   ArrowRight,
+  Award,
   BookOpen,
-  Check,
+  CalendarCheck,
+  Camera,
+  CheckCircle2,
   ChevronRight,
-  Cross,
+  FlaskConical,
+  Globe2,
   GraduationCap,
-  Heart,
+  HeartHandshake,
+  Languages,
   Mail,
   MapPin,
   Menu,
   MessageCircle,
+  MonitorSmartphone,
+  Palette,
   Phone,
-  Quote,
   ShieldCheck,
   Sparkles,
-  Star,
+  Trees,
   Users,
 } from "lucide-react";
 
-const learningPathways = [
+const navItems = [
+  ["Experience", "#experience"],
+  ["Stages", "#stages"],
+  ["Facilities", "#facilities"],
+  ["Gallery", "#gallery"],
+  ["Admissions", "#admissions"],
+];
+
+const stages = [
   {
-    number: "01",
-    title: "Crèche & Preschool",
-    copy: "A gentle, playful start where little learners feel safe, seen and excited to discover.",
-    icon: Heart,
+    title: "Nursery",
+    label: "Early discovery",
+    copy: "Warm routines, playful exploration, language confidence, and the safety young children need before they can truly flourish.",
+    image: "/images/pottersville-stage-ai.png",
+    icon: HeartHandshake,
   },
   {
-    number: "02",
-    title: "Primary School",
-    copy: "Strong foundations, creative exploration and the confidence to ask better questions.",
+    title: "Primary",
+    label: "Strong foundations",
+    copy: "Reading, numeracy, creativity, projects, and classroom habits that help pupils understand ideas instead of simply memorising them.",
+    image: "/images/pottersville-choir-ai.png",
     icon: BookOpen,
   },
   {
-    number: "03",
-    title: "College",
-    copy: "Purpose-led learning that prepares young people to think boldly and lead with character.",
+    title: "Secondary",
+    label: "Purpose and preparation",
+    copy: "Subject depth, examination readiness, character formation, leadership, and the confidence to step into the wider world.",
+    image: "/images/pottersville-senior-uniform-ai.png",
     icon: GraduationCap,
   },
 ];
 
-const testimonials = [
-  {
-    quote: "My son started reading at 3 at PurpleStars! The learning culture is progressive and the staff treat children with love.",
-    name: "Mrs. Adetola",
-    label: "PurpleStars parent",
-  },
-  {
-    quote: "Their communication culture is top-notch. I always know what happens in my child’s class.",
-    name: "Mrs. Olorundare",
-    label: "PurpleStars parent",
-  },
-  {
-    quote: "My daughter blossomed. Her confidence grew and school became a place of joy.",
-    name: "Abiola Falana",
-    label: "PurpleStars parent",
-  },
+const facilities = [
+  { title: "Laboratories", copy: "Hands-on science spaces for curiosity, practice, and discovery.", icon: FlaskConical },
+  { title: "Educational technology", copy: "Digital tools that make lessons clearer, richer, and easier to apply.", icon: MonitorSmartphone },
+  { title: "Skills acquisition", copy: "Creative and vocational exposure across design, photography, craft, cooking, and practical trades.", icon: Palette },
+  { title: "Outdoor learning", copy: "Movement, sport, farming, swimming, horse riding, and memorable shared experiences.", icon: Trees },
+  { title: "Languages", copy: "English, French, and Nigerian language learning that builds cultural confidence.", icon: Languages },
+  { title: "Examinations", copy: "Structured preparation for WAEC, NECO, UTME, and the habits behind strong outcomes.", icon: Award },
 ];
 
-const navItems = [
-  ["About", "#about"],
-  ["Learning", "#learning"],
-  ["School life", "#school-life"],
-  ["Admissions", "#admissions"],
-  ["Contact", "#contact"],
+const gallery = [
+  {
+    title: "Practical skills in motion",
+    image: "/images/pottersville-skills-ai.png",
+    alt: "Pottersville pupils in purple activity shirts during a practical skills session",
+  },
+  {
+    title: "The senior uniform in full view",
+    image: "/images/pottersville-senior-uniform-ai.png",
+    alt: "Pottersville senior learners in white shirts, purple ties, and purple uniform pieces",
+  },
+  {
+    title: "The Proprietor's visible leadership",
+    image: "/images/pottersville-proprietor.jpg",
+    alt: "The Proprietor of Pottersville Schools speaking at a school event",
+  },
+  {
+    title: "Confidence before an audience",
+    image: "/images/pottersville-choir-ai.png",
+    alt: "Pottersville pupils in purple and grey uniforms during a school performance",
+  },
 ];
 
 export default function PublicHomePage() {
   return (
-    <div className="ps-site">
-      <a className="ps-skip-link" href="#main-content">Skip to main content</a>
+    <div className="pv-site">
+      <a className="pv-skip-link" href="#main-content">Skip to main content</a>
 
-      <header className="ps-header">
-        <div className="ps-utility">
-          <div className="ps-container ps-utility-inner">
-            <a href="#contact"><MapPin size={14} aria-hidden="true" /> Two branches in Lagos</a>
-            <div>
-              <a href="mailto:purplestarsschool@gmail.com"><Mail size={14} aria-hidden="true" /> purplestarsschool@gmail.com</a>
-              <a href="tel:+2348134688832"><Phone size={14} aria-hidden="true" /> 0813 468 8832</a>
-            </div>
+      <header className="pv-header">
+        <div className="pv-container pv-nav">
+          <a className="pv-brand" href="#home" aria-label="Pottersville Schools home">
+            <img src="/images/pottersville-logo.png" alt="Pottersville Schools" />
+            <span>Pottersville<small>Schools</small></span>
+          </a>
+
+          <nav className="pv-desktop-nav" aria-label="Primary navigation">
+            {navItems.map(([label, href]) => <a key={href} href={href}>{label}</a>)}
+          </nav>
+
+          <div className="pv-nav-actions">
+            <a className="pv-portal-link" href="/login">Portal</a>
+            <a className="pv-nav-cta" href="#admissions">Apply now <ArrowRight size={16} aria-hidden="true" /></a>
           </div>
-        </div>
 
-        <div className="ps-nav-wrap">
-          <div className="ps-container ps-nav">
-            <a className="ps-logo" href="#home" aria-label="PurpleStars School home">
-              <img src="/images/purplestars-logo-white.png" alt="PurpleStars School" />
-            </a>
-            <nav className="ps-desktop-nav" aria-label="Primary navigation">
-              {navItems.map(([label, href]) => <a key={href} href={href}>{label}</a>)}
+          <details className="pv-mobile-menu">
+            <summary aria-label="Open navigation"><Menu size={22} aria-hidden="true" /></summary>
+            <nav aria-label="Mobile navigation">
+              {navItems.map(([label, href]) => (
+                <a key={href} href={href}>{label}<ChevronRight size={16} aria-hidden="true" /></a>
+              ))}
+              <a href="/login">Portal<ChevronRight size={16} aria-hidden="true" /></a>
             </nav>
-            <a className="ps-portal-link" href="https://purplestars-school-demo.netlify.app/">Portal login <ArrowRight size={15} aria-hidden="true" /></a>
-            <details className="ps-mobile-menu">
-              <summary aria-label="Open navigation"><Menu size={22} aria-hidden="true" /></summary>
-              <nav aria-label="Mobile navigation">
-                {navItems.map(([label, href]) => <a key={href} href={href}>{label}<ChevronRight size={16} aria-hidden="true" /></a>)}
-                <a className="ps-mobile-portal" href="https://purplestars-school-demo.netlify.app/">Portal login <ArrowRight size={16} aria-hidden="true" /></a>
-              </nav>
-            </details>
-          </div>
+          </details>
         </div>
       </header>
 
-      <main id="main-content" className="ps-home">
-        <section className="ps-hero" id="home">
-          <div className="ps-hero-orb ps-hero-orb-one" />
-          <div className="ps-hero-orb ps-hero-orb-two" />
-          <div className="ps-container ps-hero-grid">
-            <div className="ps-hero-copy">
-              <p className="ps-kicker"><Sparkles size={15} aria-hidden="true" /> Every child matters</p>
-              <h1>Where every child learns to <em>shine.</em></h1>
-              <p className="ps-hero-intro">A caring, joyful school community nurturing global stars of character, competence and purpose—from Crèche to College.</p>
-              <div className="ps-hero-actions">
-                <a className="ps-button ps-button-primary" href="#admissions">Start your journey <ArrowRight size={17} aria-hidden="true" /></a>
-                <a className="ps-button ps-button-secondary" href="#school-life">Explore school life <ChevronRight size={17} aria-hidden="true" /></a>
+      <main id="main-content" className="pv-main">
+        <section className="pv-hero" id="home">
+          <div className="pv-container pv-hero-grid">
+            <div className="pv-hero-copy">
+              <p className="pv-kicker"><Sparkles size={16} aria-hidden="true" /> Admissions are open</p>
+              <h1><span>Pottersville</span><span>Schools</span></h1>
+              <p className="pv-hero-lede">A place of discovery, character development, and academic excellence for Nursery, Primary, and Secondary learners in Lagos.</p>
+              <div className="pv-hero-actions">
+                <a className="pv-button pv-button-primary" href="#admissions">Book an admissions visit <ArrowRight size={18} aria-hidden="true" /></a>
+                <a className="pv-button pv-button-secondary" href="#gallery">Watch the school reel <Camera size={18} aria-hidden="true" /></a>
               </div>
-              <div className="ps-hero-proof" aria-label="PurpleStars School at a glance">
-                <div><strong>2015</strong><span>Our journey began</span></div>
-                <div><strong>2</strong><span>Lagos branches</span></div>
-                <div><strong>3</strong><span>Learning stages</span></div>
+              <div className="pv-hero-proof" aria-label="Pottersville strengths">
+                <span><strong>3</strong> learning stages</span>
+                <span><strong>6</strong> enrichment lanes</span>
+                <span><strong>2</strong> admissions lines</span>
               </div>
-            </div>
-
-            <div className="ps-hero-media">
-              <div className="ps-hero-image-wrap">
-                <img src="/images/children-together.jpg" alt="PurpleStars pupils sharing a joyful school moment" />
-              </div>
-              <div className="ps-hero-note">
-                <span><Star size={18} fill="currentColor" aria-hidden="true" /></span>
-                <div><strong>Bright minds.</strong><small>Bold hearts.</small></div>
-              </div>
-              <div className="ps-hero-badge"><span>PS</span><p><strong>Rooted in care</strong><small>Growing with purpose</small></p></div>
-            </div>
-          </div>
-        </section>
-
-        <section className="ps-promise-strip" aria-label="PurpleStars commitments">
-          <div className="ps-container">
-            <span><ShieldCheck size={18} aria-hidden="true" /> Safe & caring</span>
-            <span><BookOpen size={18} aria-hidden="true" /> Creative learning</span>
-            <span><Cross size={18} aria-hidden="true" /> Christian values</span>
-            <span><Users size={18} aria-hidden="true" /> Known by name</span>
-          </div>
-        </section>
-
-        <section className="ps-section ps-foundations" aria-labelledby="foundations-title">
-          <div className="ps-container">
-            <div className="ps-section-heading ps-section-heading-center">
-              <p className="ps-eyebrow">What guides us</p>
-              <h2 id="foundations-title">Purpose in every part of the <em>school day.</em></h2>
-              <p>Our values shape how we teach, care for and inspire every learner at PurpleStars.</p>
-            </div>
-            <div className="ps-foundation-grid">
-              <article>
-                <span className="ps-foundation-icon"><ShieldCheck size={23} aria-hidden="true" /></span>
-                <p className="ps-foundation-label">01 · Our Mission</p>
-                <h3>Care that gives every learner room to grow.</h3>
-                <p>To provide a caring, safe, and intellectually stimulating environment rooted in Christian values, where every learner grows in wisdom, creativity and confidence.</p>
-              </article>
-              <article>
-                <span className="ps-foundation-icon"><BookOpen size={23} aria-hidden="true" /></span>
-                <p className="ps-foundation-label">02 · Our Curriculum</p>
-                <h3>Learning children understand, apply and enjoy.</h3>
-                <p>We deliver learning through themes, projects, real-life experiences, creative tasks and technology. Children don’t just memorize — they understand, apply and enjoy learning.</p>
-              </article>
-              <article>
-                <span className="ps-foundation-icon"><Heart size={23} aria-hidden="true" /></span>
-                <p className="ps-foundation-label">03 · Child&apos;s Care</p>
-                <h3>Safety, health and wellbeing built into every day.</h3>
-                <p>A safe and well-equipped environment with a fully functional sickbay, partnerships with qualified paediatricians and hospitals, hygienic restrooms with regular sanitation, and access to clean water and reliable power.</p>
-              </article>
-              <article className="ps-foundation-vision">
-                <span className="ps-foundation-icon"><Star size={23} fill="currentColor" aria-hidden="true" /></span>
+              <div className="pv-motion-strip" aria-hidden="true">
                 <div>
-                  <p className="ps-foundation-label">04 · Our Vision</p>
-                  <h3>To raise global stars of character, competence, and purpose.</h3>
+                  <span>Nursery</span><span>Primary</span><span>Secondary</span><span>Skills</span><span>Languages</span><span>WAEC</span><span>NECO</span><span>UTME</span>
+                  <span>Nursery</span><span>Primary</span><span>Secondary</span><span>Skills</span><span>Languages</span><span>WAEC</span><span>NECO</span><span>UTME</span>
                 </div>
-              </article>
+              </div>
+            </div>
+
+            <div className="pv-hero-media" aria-label="Pottersville campus preview">
+              <video className="pv-hero-video" src="/media/pottersville-campus-reel.mp4" autoPlay muted loop playsInline poster="/images/pottersville-student-leaders-ai.png" />
+              <div className="pv-hero-photo">
+                <img src="/images/pottersville-student-leaders-ai.png" alt="Pottersville learners in the white and purple school uniform" />
+              </div>
+              <div className="pv-hero-ticket">
+                <span>PV</span>
+                <div><strong>Moulded for exploits</strong><small>Rooted in learning, care, and character.</small></div>
+              </div>
             </div>
           </div>
         </section>
 
-        <section className="ps-section ps-about" id="about">
-          <div className="ps-container ps-about-grid">
-            <div className="ps-about-media">
-              <img src="/images/parents-community.jpg" alt="PurpleStars parents gathered as a school community" />
-              <div className="ps-vision-card">
-                <span>Every child matters</span>
-                <p>Known, valued and inspired to shine.</p>
+        <section className="pv-strip" aria-label="Pottersville commitments">
+          <div className="pv-container">
+            <span><ShieldCheck size={18} aria-hidden="true" /> Safe, caring environment</span>
+            <span><BookOpen size={18} aria-hidden="true" /> Balanced curriculum</span>
+            <span><Globe2 size={18} aria-hidden="true" /> Globally minded learners</span>
+            <span><Users size={18} aria-hidden="true" /> Parent-school partnership</span>
+          </div>
+        </section>
+
+        <section className="pv-section pv-experience" id="experience">
+          <div className="pv-container pv-split">
+            <div className="pv-section-copy">
+              <p className="pv-eyebrow">The Pottersville experience</p>
+              <h2>School should feel alive before it feels impressive.</h2>
+              <p>Prospective parents are not only choosing classrooms. They are choosing daily rhythm, trusted adults, meaningful friendships, strong academics, and a place where their child is known.</p>
+              <div className="pv-check-list">
+                <span><CheckCircle2 size={18} aria-hidden="true" /> Discovery-led learning across the early years, primary, and secondary sections.</span>
+                <span><CheckCircle2 size={18} aria-hidden="true" /> Character formation, confidence, and communication built into school life.</span>
+                <span><CheckCircle2 size={18} aria-hidden="true" /> Academic preparation with practical skills, technology, languages, and outdoor experiences.</span>
               </div>
             </div>
-            <div className="ps-section-copy">
-              <p className="ps-eyebrow">Welcome to PurpleStars</p>
-              <h2>A school that sees the <em>whole child.</em></h2>
-              <p className="ps-lead">Children do their best learning when they feel safe, valued and inspired. That belief shapes every classroom, every conversation and every day at PurpleStars.</p>
-              <div className="ps-value-list">
-                <article><span><Heart size={19} aria-hidden="true" /></span><div><h3>Care comes first</h3><p>Each learner is supported to grow at their own pace, with teachers who know them well.</p></div></article>
-                <article><span><Sparkles size={19} aria-hidden="true" /></span><div><h3>Learning feels alive</h3><p>Themes, projects, real-life experiences and technology turn knowledge into understanding.</p></div></article>
-                <article><span><ShieldCheck size={19} aria-hidden="true" /></span><div><h3>Wellbeing is built in</h3><p>A safe, well-equipped environment with hygienic spaces, reliable utilities and trusted medical support.</p></div></article>
+
+            <div className="pv-experience-panel">
+              <img src="/images/pottersville-proprietor.jpg" alt="The Proprietor of Pottersville Schools speaking at a school event" />
+              <div>
+                <small>Leadership</small>
+                <strong>A school led with presence and conviction.</strong>
+                <p>The Proprietor remains part of the public story, while student imagery is anonymized for privacy and safe marketing use.</p>
               </div>
-              <a className="ps-text-link" href="#learning">Discover how we learn <ArrowRight size={16} aria-hidden="true" /></a>
             </div>
           </div>
         </section>
 
-        <section className="ps-section ps-learning" id="learning">
-          <div className="ps-container">
-            <div className="ps-section-heading ps-section-heading-center">
-              <p className="ps-eyebrow">A journey for every stage</p>
-              <h2>Growing curious minds from <em>Crèche to College.</em></h2>
-              <p>One caring community, with the right balance of support and challenge at every step.</p>
+        <section className="pv-section pv-stages" id="stages">
+          <div className="pv-container">
+            <div className="pv-section-heading">
+              <p className="pv-eyebrow">Nursery to Secondary</p>
+              <h2>Every stage has its own kind of care.</h2>
+              <p>The journey is designed to move children from wonder, to confidence, to purpose.</p>
             </div>
-            <div className="ps-pathway-grid">
-              {learningPathways.map((pathway) => (
-                <article key={pathway.number} className="ps-pathway-card">
-                  <span className="ps-pathway-number">{pathway.number}</span>
-                  <span className="ps-pathway-icon"><pathway.icon size={24} aria-hidden="true" /></span>
-                  <h3>{pathway.title}</h3>
-                  <p>{pathway.copy}</p>
-                  <a href="#admissions">Enquire about this stage <ArrowRight size={15} aria-hidden="true" /></a>
+
+            <div className="pv-stage-grid">
+              {stages.map((stage) => (
+                <article className="pv-stage-card" key={stage.title}>
+                  <img src={stage.image} alt={`${stage.title} learners at Pottersville Schools`} />
+                  <div>
+                    <span><stage.icon size={18} aria-hidden="true" /> {stage.label}</span>
+                    <h3>{stage.title}</h3>
+                    <p>{stage.copy}</p>
+                    <a href="#admissions">Ask about {stage.title}<ArrowRight size={16} aria-hidden="true" /></a>
+                  </div>
                 </article>
               ))}
             </div>
           </div>
         </section>
 
-        <section className="ps-section ps-curriculum">
-          <div className="ps-container ps-curriculum-grid">
-            <div className="ps-curriculum-copy">
-              <p className="ps-eyebrow ps-eyebrow-light">Learning beyond the page</p>
-              <h2>Understanding that lasts. Confidence that grows.</h2>
-              <p>Our learners do more than memorise. They investigate, create, collaborate and apply what they know to the world around them.</p>
-              <ul>
-                <li><Check size={16} aria-hidden="true" /> Theme and project-based learning</li>
-                <li><Check size={16} aria-hidden="true" /> Technology-enabled classrooms</li>
-                <li><Check size={16} aria-hidden="true" /> STEM and hands-on activity spaces</li>
-                <li><Check size={16} aria-hidden="true" /> Reading, nature and creative exploration</li>
-              </ul>
+        <section className="pv-section pv-facilities" id="facilities">
+          <div className="pv-container pv-facilities-grid">
+            <div className="pv-section-copy">
+              <p className="pv-eyebrow pv-eyebrow-light">Beyond the classroom</p>
+              <h2>Built for academics, confidence, and useful skills.</h2>
+              <p>Pottersville pairs formal learning with facilities and enrichment that help pupils test ideas, move their bodies, build skills, and prepare for recognised examinations.</p>
+              <a className="pv-button pv-button-light" href="#admissions">Speak with admissions <MessageCircle size={18} aria-hidden="true" /></a>
             </div>
-            <div className="ps-curriculum-gallery" aria-label="Learning moments at PurpleStars">
-              <img className="ps-gallery-tall" src="/images/young-speaker.jpg" alt="A PurpleStars learner speaking confidently at a school event" />
-              <img src="/images/sports-day.jpg" alt="PurpleStars children enjoying an outdoor activity" />
-              <img src="/images/career-day.jpg" alt="Young PurpleStars learners taking part in career day" />
-            </div>
-          </div>
-        </section>
 
-        <section className="ps-section ps-life" id="school-life">
-          <div className="ps-container">
-            <div className="ps-section-heading ps-life-heading">
-              <div>
-                <p className="ps-eyebrow">Life at PurpleStars</p>
-                <h2>Every moment has room for <em>joy.</em></h2>
-              </div>
-              <p>Learning, friendship, celebration and discovery all belong in a memorable school journey.</p>
-            </div>
-            <div className="ps-life-grid">
-              <figure className="ps-life-feature">
-                <img src="/images/educators-team.jpg" alt="The PurpleStars teaching and support team" />
-                <figcaption><span>Our people</span><strong>The heart of our school</strong><p>Passionate educators united by one purpose: helping every child reach their potential.</p></figcaption>
-              </figure>
-              <figure className="ps-life-small">
-                <img src="/images/birthday-celebration.jpg" alt="PurpleStars children celebrating a birthday together" />
-                <figcaption><span>Community</span><strong>Milestones shared together</strong></figcaption>
-              </figure>
-              <div className="ps-life-message">
-                <span><Sparkles size={22} aria-hidden="true" /></span>
-                <p>“With bright minds and bold hearts, we nurture thinkers, leaders and compassionate citizens for tomorrow.”</p>
-                <a href="#admissions">Join our community <ArrowRight size={16} aria-hidden="true" /></a>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="ps-section ps-stories" aria-labelledby="parent-stories-title">
-          <div className="ps-container">
-            <div className="ps-section-heading ps-section-heading-center">
-              <p className="ps-eyebrow">Parent stories</p>
-              <h2 id="parent-stories-title">Loved by the families who know us best.</h2>
-            </div>
-            <div className="ps-testimonial-grid">
-              {testimonials.map((testimonial, index) => (
-                <figure className={index === 1 ? "ps-testimonial ps-testimonial-featured" : "ps-testimonial"} key={testimonial.name}>
-                  <Quote size={22} fill="currentColor" aria-hidden="true" />
-                  <blockquote>{testimonial.quote}</blockquote>
-                  <figcaption><span>{testimonial.name.slice(0, 1)}</span><div><strong>{testimonial.name}</strong><small>{testimonial.label}</small></div></figcaption>
-                </figure>
+            <div className="pv-feature-grid">
+              {facilities.map(({ title, copy, icon: Icon }) => (
+                <article key={title}>
+                  <Icon size={22} aria-hidden="true" />
+                  <h3>{title}</h3>
+                  <p>{copy}</p>
+                </article>
               ))}
             </div>
           </div>
         </section>
 
-        <section className="ps-admissions" id="admissions">
-          <div className="ps-container ps-admissions-card">
-            <div>
-              <p className="ps-eyebrow ps-eyebrow-light">Admissions are open</p>
-              <h2>Come and see where your child can shine.</h2>
-              <p>Talk to our admissions team, ask your questions and plan a visit to the PurpleStars branch closest to you.</p>
+        <section className="pv-section pv-gallery" id="gallery">
+          <div className="pv-container">
+            <div className="pv-section-heading pv-gallery-heading">
+              <div>
+                <p className="pv-eyebrow">See the school</p>
+                <h2>A modern story, carried by real Pottersville moments.</h2>
+              </div>
+              <p>The page now uses Pottersville&apos;s exact uniform language, anonymized student imagery, and a short reel so visitors get a fuller sense of daily life.</p>
             </div>
-            <div className="ps-admissions-actions">
-              <a className="ps-button ps-button-white" href="https://wa.me/2348134688832?text=Hello%20PurpleStars%20School%2C%20I%20would%20like%20to%20ask%20about%20admissions."><MessageCircle size={18} aria-hidden="true" /> Chat with admissions</a>
-              <a className="ps-button ps-button-ghost" href="tel:+2348134688832"><Phone size={17} aria-hidden="true" /> Call 0813 468 8832</a>
+
+            <div className="pv-gallery-grid">
+              <figure className="pv-reel-card">
+                <video src="/media/pottersville-campus-reel.mp4" autoPlay muted loop playsInline poster="/images/pottersville-student-leaders-ai.png" />
+                <figcaption><Camera size={18} aria-hidden="true" /> Campus reel</figcaption>
+              </figure>
+              {gallery.map((item) => (
+                <figure key={item.title}>
+                  <img src={item.image} alt={item.alt} />
+                  <figcaption>{item.title}</figcaption>
+                </figure>
+              ))}
+            </div>
+
+            <div className="pv-demo-video-card">
+              <video src="/media/pottersville-website-demo.mp4" controls preload="metadata" poster="/images/pottersville-student-leaders-ai.png" />
+              <div>
+                <p className="pv-eyebrow">Demo video</p>
+                <h3>Pottersville admissions story in 30 seconds.</h3>
+                <p>A short silent showcase video with branded motion graphics, anonymized student imagery, and the unchanged Proprietor photo.</p>
+              </div>
             </div>
           </div>
         </section>
 
-        <section className="ps-section ps-contact" id="contact">
-          <div className="ps-container">
-            <div className="ps-section-heading ps-contact-heading">
-              <div><p className="ps-eyebrow">Find your PurpleStars</p><h2>Two welcoming branches in Lagos.</h2></div>
-              <a className="ps-text-link" href="mailto:purplestarsschool@gmail.com">Email the school <Mail size={16} aria-hidden="true" /></a>
+        <section className="pv-admissions" id="admissions">
+          <div className="pv-container pv-admissions-grid">
+            <div>
+              <p className="pv-eyebrow pv-eyebrow-light">Admissions</p>
+              <h2>Come and see whether Pottersville feels right for your child.</h2>
+              <p>Application forms are available for Primary and Secondary learners. Contact the school to ask questions, confirm available places, and plan your visit.</p>
             </div>
-            <div className="ps-campus-grid">
-              <article>
-                <span className="ps-campus-icon"><MapPin size={20} aria-hidden="true" /></span>
-                <div><p>Branch 01</p><h3>Ogba</h3><address>11 Adenekan Salako Close,<br />Off Ijaiye Road, Ogba-Ikeja, Lagos</address></div>
-                <a href="https://maps.google.com/?q=11+Adenekan+Salako+Close+Ogba+Ikeja+Lagos" aria-label="View Ogba branch on Google Maps"><ArrowRight size={18} aria-hidden="true" /></a>
-              </article>
-              <article>
-                <span className="ps-campus-icon"><MapPin size={20} aria-hidden="true" /></span>
-                <div><p>Branch 02</p><h3>New Oko Oba</h3><address>9/11 Dayo Kuye Close,<br />Off Abiodun Kuye Road, New Oko Oba, Lagos</address></div>
-                <a href="https://maps.google.com/?q=9%2F11+Dayo+Kuye+Close+New+Oko+Oba+Lagos" aria-label="View New Oko Oba branch on Google Maps"><ArrowRight size={18} aria-hidden="true" /></a>
-              </article>
+            <div className="pv-contact-panel">
+              <a href="tel:+2348038622225"><Phone size={18} aria-hidden="true" /><span><small>Primary line</small><strong>0803 862 2225</strong></span></a>
+              <a href="tel:+2349030285993"><Phone size={18} aria-hidden="true" /><span><small>Secondary line</small><strong>0903 028 5993</strong></span></a>
+              <a href="mailto:admin@pottersvilleschool.com.ng"><Mail size={18} aria-hidden="true" /><span><small>Email</small><strong>admin@pottersvilleschool.com.ng</strong></span></a>
+              <a href="#contact"><MapPin size={18} aria-hidden="true" /><span><small>Location</small><strong>Lagos, Nigeria</strong></span></a>
+            </div>
+          </div>
+        </section>
+
+        <section className="pv-section pv-contact" id="contact">
+          <div className="pv-container pv-contact-grid">
+            <div>
+              <p className="pv-eyebrow">Visit Pottersville</p>
+              <h2>Bring your questions. Meet the school. Picture the fit.</h2>
+            </div>
+            <div className="pv-visit-card">
+              <CalendarCheck size={24} aria-hidden="true" />
+              <h3>Admissions visit</h3>
+              <p>Ask about the right stage, available spaces, uniforms, curriculum, fees, and what a normal school day looks like.</p>
+              <a className="pv-button pv-button-primary" href="https://wa.me/2348038622225?text=Hello%20Pottersville%20Schools%2C%20I%20would%20like%20to%20ask%20about%20admissions.">Chat on WhatsApp <ArrowRight size={18} aria-hidden="true" /></a>
             </div>
           </div>
         </section>
       </main>
 
-      <footer className="ps-footer">
-        <div className="ps-container ps-footer-grid">
-          <div className="ps-footer-brand"><img src="/images/purplestars-logo-white.png" alt="PurpleStars School" /><p>A caring school community raising global stars of character, competence and purpose.</p></div>
-          <nav aria-label="Footer navigation"><strong>Explore</strong>{navItems.slice(0, 4).map(([label, href]) => <a key={href} href={href}>{label}</a>)}</nav>
-          <div><strong>Contact</strong><a href="tel:+2348134688832">0813 468 8832</a><a href="tel:+2348082621273">0808 262 1273</a><a href="mailto:purplestarsschool@gmail.com">purplestarsschool@gmail.com</a></div>
-          <div><strong>School access</strong><a href="https://purplestars-school-demo.netlify.app/">Portal login</a><a href="#admissions">Admissions enquiry</a><a href="#contact">Branch locations</a></div>
+      <footer className="pv-footer">
+        <div className="pv-container pv-footer-grid">
+          <div className="pv-footer-brand">
+            <img src="/images/pottersville-logo.png" alt="Pottersville Schools" />
+            <p>Pottersville Schools. Cultivating potential, celebrating success.</p>
+          </div>
+          <nav aria-label="Footer navigation">
+            {navItems.map(([label, href]) => <a key={href} href={href}>{label}</a>)}
+          </nav>
+          <div>
+            <a href="tel:+2348038622225">0803 862 2225</a>
+            <a href="tel:+2349030285993">0903 028 5993</a>
+            <a href="mailto:admin@pottersvilleschool.com.ng">admin@pottersvilleschool.com.ng</a>
+          </div>
         </div>
-        <div className="ps-container ps-footer-bottom"><span>© 2026 PurpleStars School. Every child matters.</span><a href="#home">Back to top ↑</a></div>
       </footer>
     </div>
   );

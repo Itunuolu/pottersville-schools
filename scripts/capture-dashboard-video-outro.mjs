@@ -38,11 +38,11 @@ await page.setContent(`<!doctype html>
     </head>
     <body>
       <main class="wrap">
-        <div class="brand"><span class="mark">✦</span><span>PurpleStars<small>School portal</small></span></div>
-        <div class="eyebrow">PurpleStars school portal</div>
+        <div class="brand"><span class="mark">✦</span><span>Pottersville<small>School portal</small></span></div>
+        <div class="eyebrow">Pottersville school portal</div>
         <h1>Ready for a smarter, more connected school experience?</h1>
         <p>Explore the live demonstration, test all three role-based workspaces, and reach out to schedule a guided product conversation.</p>
-        <span class="badge">purplestars-school-demo.netlify.app</span>
+        <span class="badge">pottersville-school-demo.netlify.app</span>
       </main>
     </body>
   </html>`);

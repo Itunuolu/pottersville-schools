@@ -7,9 +7,9 @@ const require = createRequire(import.meta.url);
 const { chromium } = require("playwright");
 
 const ROOT = process.cwd();
-const BASE_URL = process.env.PURPLESTARS_URL || "https://purplestars-school-demo.netlify.app/";
+const BASE_URL = process.env.POTTERSVILLE_URL || "https://pottersville-school-demo.netlify.app/";
 const OUTPUT_DIR = path.join(ROOT, "artifacts", "demo-video", "raw");
-const OUTPUT_FILE = path.join(OUTPUT_DIR, "purplestars-dashboard-walkthrough.webm");
+const OUTPUT_FILE = path.join(OUTPUT_DIR, "pottersville-dashboard-walkthrough.webm");
 const EDGE_PATH = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
 
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -65,7 +65,7 @@ async function showTitle({ eyebrow, title, copy, badge, duration = 4_000 }) {
       </head>
       <body>
         <main class="wrap">
-          <div class="brand"><span class="mark">✦</span><span>PurpleStars<small>School portal</small></span></div>
+          <div class="brand"><span class="mark">✦</span><span>Pottersville<small>School portal</small></span></div>
           <div class="eyebrow">${eyebrow}</div>
           <h1>${title}</h1>
           <p>${copy}</p>
@@ -96,7 +96,7 @@ async function installVideoLayer() {
   await page.evaluate(() => {
     const caption = document.createElement("div");
     caption.id = "ps-video-caption";
-    caption.innerHTML = "<small>PurpleStars dashboard redesign</small><strong>Connected school operations, teaching, and learning.</strong>";
+    caption.innerHTML = "<small>Pottersville dashboard redesign</small><strong>Connected school operations, teaching, and learning.</strong>";
     document.body.appendChild(caption);
 
     const cursor = document.createElement("div");
@@ -184,15 +184,15 @@ try {
   await showTitle({
     eyebrow: "Investor product walkthrough",
     title: "A modern school dashboard, built around every role.",
-    copy: "See how PurpleStars connects administration, teachers, students, learning resources, assessment, and reporting in one easy-to-navigate experience.",
+    copy: "See how Pottersville connects administration, teachers, students, learning resources, assessment, and reporting in one easy-to-navigate experience.",
     badge: "Live interactive demonstration",
     duration: 4_600
   });
 
   await page.goto(BASE_URL, { waitUntil: "networkidle" });
   await page.evaluate(() => {
-    localStorage.removeItem("purplestars-demo-data");
-    sessionStorage.removeItem("purplestars-demo-session");
+    localStorage.removeItem("pottersville-demo-data");
+    sessionStorage.removeItem("pottersville-demo-session");
   });
   await page.reload({ waitUntil: "networkidle" });
   await installVideoLayer();
@@ -208,7 +208,7 @@ try {
   await wait(900);
 
   await navigate("attendance.html", "Fast daily operations", "Teachers or administrators can mark attendance quickly and save the complete class register.", 2_700);
-  await click('[data-student="PSNT018"] [data-status="present"]', 900);
+  await click('[data-student="PVNT018"] [data-status="present"]', 900);
   await click("#save-attendance", 1_700);
   await caption("Attendance saved", "Colour-coded status controls reduce friction while maintaining a clear audit-ready register.");
   await wait(2_300);
@@ -233,7 +233,7 @@ try {
   await page.locator('#lesson-form input[name="file"]').setInputFiles({
     name: "Cell-Structure-Revision-Guide.pdf",
     mimeType: "application/pdf",
-    buffer: Buffer.from("%PDF-1.4\n% PurpleStars demonstration lesson note\n")
+    buffer: Buffer.from("%PDF-1.4\n% Pottersville demonstration lesson note\n")
   });
   await caption("Publish in a few steps", "Choose the subject, class, and week, attach a PDF, then publish it directly to learners.");
   await wait(2_200);
@@ -281,10 +281,10 @@ try {
   await wait(2_600);
 
   await showTitle({
-    eyebrow: "PurpleStars school portal",
+    eyebrow: "Pottersville school portal",
     title: "Ready for a smarter, more connected school experience?",
     copy: "Explore the live demonstration, test all three role-based workspaces, and reach out to schedule a guided product conversation.",
-    badge: "purplestars-school-demo.netlify.app",
+    badge: "pottersville-school-demo.netlify.app",
     duration: 5_400
   });
 } finally {

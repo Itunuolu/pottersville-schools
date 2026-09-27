@@ -12,7 +12,7 @@ INSERT INTO `portal_users` (
   'admin',
   'active',
   NULL,
-  'PURPLESTARS',
+  'POTTERSVILLE',
   'system:owner-recovery'
 )
 ON CONFLICT(`email`) DO UPDATE SET

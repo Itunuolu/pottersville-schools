@@ -1,4 +1,4 @@
-import { Clock3, LogOut, Mail, ShieldAlert, Sparkles } from "lucide-react";
+import { Clock3, LogOut, Mail, ShieldAlert } from "lucide-react";
 import { redirect } from "next/navigation";
 import { getChatGPTUser } from "../chatgpt-auth";
 
@@ -11,7 +11,7 @@ export default async function AccessPendingPage({ searchParams }: { searchParams
 
   return (
     <main className="access-page">
-      <a className="access-brand" href="/login"><span><Sparkles size={19} /></span><strong>PurpleStars<small>School portal</small></strong></a>
+      <a className="access-brand" href="/login"><span><img src="/images/pottersville-logo.png" alt="" /></span><strong>Pottersville<small>School portal</small></strong></a>
       <section className="access-card">
         <span className={`access-status-icon${suspended ? " suspended" : ""}`}>{suspended ? <ShieldAlert size={28} /> : <Clock3 size={28} />}</span>
         <p className="eyebrow">{suspended ? "Account unavailable" : "Activation required"}</p>
