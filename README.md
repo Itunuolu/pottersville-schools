@@ -1,12 +1,12 @@
-# Pottersville School Portal
+# Pottersville Schools Portal
 
-Pottersville is a connected school operations platform for administrators, teachers, and students. It brings academic setup, attendance, lesson resources, assignments, assessments, results, communication, and reporting into one role-aware workspace.
+Pottersville Schools is a connected school operations platform for administrators, teachers, and students. It brings academic setup, attendance, lesson resources, assignments, assessments, results, communication, and reporting into one role-aware workspace.
 
-**Live investor demo:** [pottersville-school-demo.netlify.app](https://pottersville-school-demo.netlify.app/)
+**Live investor demo:** [itunuolu.github.io/pottersville-schools](https://itunuolu.github.io/pottersville-schools/)
 
 ## Investor demonstration application
 
-The public investor application is served from `docs/` and deploys to both Netlify and GitHub Pages. Its root page opens directly to the portal sign-in, matching the investor demo flow, while the admissions website is preserved at `docs/school.html`. It is a browser-safe demonstration with fictional data and includes:
+The public investor application is served from `docs/` and deploys through GitHub Pages. Its root page opens directly to the portal sign-in, matching the investor demo flow, while the admissions website is preserved at `docs/school.html`. It is a browser-safe demonstration with fictional data and includes:
 
 - a branded sign-in page with administrator, teacher, and student demo accounts;
 - separate role-based dashboards and ten navigable portal pages;

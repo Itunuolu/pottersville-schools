@@ -7,7 +7,7 @@ const require = createRequire(import.meta.url);
 const { chromium } = require("playwright");
 
 const ROOT = process.cwd();
-const BASE_URL = process.env.POTTERSVILLE_URL || "https://pottersville-school-demo.netlify.app/";
+const BASE_URL = process.env.POTTERSVILLE_URL || "https://itunuolu.github.io/pottersville-schools/";
 const OUTPUT_DIR = path.join(ROOT, "artifacts", "demo-video", "raw");
 const OUTPUT_FILE = path.join(OUTPUT_DIR, "pottersville-dashboard-walkthrough.webm");
 const EDGE_PATH = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
@@ -284,7 +284,7 @@ try {
     eyebrow: "Pottersville school portal",
     title: "Ready for a smarter, more connected school experience?",
     copy: "Explore the live demonstration, test all three role-based workspaces, and reach out to schedule a guided product conversation.",
-    badge: "pottersville-school-demo.netlify.app",
+    badge: "itunuolu.github.io/pottersville-schools",
     duration: 5_400
   });
 } finally {
